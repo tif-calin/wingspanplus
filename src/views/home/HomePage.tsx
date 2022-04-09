@@ -23,10 +23,10 @@ const HomePage = (_: Props): React.ReactElement => {
   return (
     <>
       <Page>
-        <h1>Home Page</h1>
+        <h1>Home</h1>
         <div
           className="content"
-        >This is the home page</div>
+        >This is the home page for Culi's Wingspan helper.</div>
       </Page>
     </>
   );
