@@ -14,6 +14,7 @@ const StyledFooter = styled.footer`
     margin-top: calc(1rem + 1vh);
     gap: 0.25rem;
 
+    color: unset;
     opacity: 0.5;
     transition: opacity 0.15s;
 
