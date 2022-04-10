@@ -23,7 +23,8 @@ const Page = styled.div`
     border-radius: 0.25rem;
   }
 
-  & > .endnote {
+  & > .disclaimer {
+    padding: 0 1.5rem;
     font-size: 0.75rem;
     font-weight: 200;
   }
@@ -61,7 +62,7 @@ const HomePage = (_: Props): React.ReactElement => {
             15 of the 42 orders are not represented at all in Wingspan. The largest of these is Tinamiformes which contains 47 species tinamous. They are ground-dwelling and usually quite sedentary ratites from South and Central America.
           </p>
         </section>
-        <div className="endnote">
+        <div className="disclaimer">
           WingspanPlusPlus a fan project and has no official connection with Wingspan or Stonemaier Games.
         </div>
       </Page>
