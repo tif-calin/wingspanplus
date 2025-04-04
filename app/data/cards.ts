@@ -1,4 +1,6 @@
 /* eslint-disable */
+
+// https://boardgamegeek.com/filepage/193164/
 const data = [
   {
       "Common name": "Abbott's Booby",
@@ -23422,4 +23424,4 @@ const data = [
   }
 ];
 
-export default data; 
+export default data;

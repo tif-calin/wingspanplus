@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
+import { styled } from "@linaria/react";
 import Footer from './Footer';
 import Header from './Header';
 
@@ -15,7 +15,7 @@ const StyledLayout = styled.div`
 
   & > :is(header, main, footer) {
     width: 100%;
-  
+
     display: flex;
     flex-direction: column;
     align-items: center;

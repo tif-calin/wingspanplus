@@ -1,8 +1,8 @@
 import React from 'react';
-import styled from 'styled-components';
+import { styled } from "@linaria/react";
 import ExternalLink from '../ExternalLink';
 
-const REPO_URL = 
+const REPO_URL =
   process.env.REACT_APP_REPO_URL
   || 'https://github.com/tif-calin/culiboot'
 ;
@@ -39,7 +39,7 @@ interface Props {
 const Footer= ({ path }: Props): React.ReactElement => {
   return (
     <StyledFooter>
-      <ExternalLink 
+      <ExternalLink
         href={path ? `${REPO_URL}/tree/main/${path}` : REPO_URL}
       >steal this</ExternalLink>
     </StyledFooter>
