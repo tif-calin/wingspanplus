@@ -1,5 +1,5 @@
 // React Router generated types for route:
-// pages/taxalink/index.ts
+// pages/makecard/index.ts
 
 import type * as T from "react-router/route-module"
 
@@ -10,9 +10,9 @@ type Module = typeof import("../index.js")
 
 export type Info = {
   parents: [Parent0, Parent1],
-  id: "pages/taxalink/index"
-  file: "pages/taxalink/index.ts"
-  path: "taxalink"
+  id: "pages/makecard/index"
+  file: "pages/makecard/index.ts"
+  path: "makecard"
   params: {} & { [key: string]: string | undefined }
   module: Module
   loaderData: T.CreateLoaderData<Module>

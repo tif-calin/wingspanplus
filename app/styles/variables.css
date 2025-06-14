@@ -1,0 +1,35 @@
+@import url("./open-color.css");
+@import url("./shadow-palette.css");
+
+/*** ===================== */
+/** === ATOMIC TOKENS === **/
+/* ===================== ***/
+:root {
+  /* Color Tokens (https://yeun.github.io/open-color/) */
+  --color-white: #f8fafb;
+  --color-offwhite: #f2f4f6;
+  --color-black: #121210;
+  --color-offblack: #252521;
+
+  /* Font Tokens (https://modernfontstacks.com/) */
+  --font-transitional: Charter, 'Bitstream Charter', 'Sitka Text', Cambria, serif;
+  --font-humanist: Seravek, 'Gill Sans Nova', Ubuntu, Calibri, 'DejaVu Sans', source-sans-pro, sans-serif;
+  --font-code: ui-monospace, 'Cascadia Code', 'Source Code Pro', Menlo, Consolas, 'DejaVu Sans Mono', monospace;
+  --font-handwritten: 'Segoe Print', 'Bradley Hand', Chilanka, TSCu_Comic, casual, cursive;
+font-weight: normal;
+}
+
+/*** ======================= */
+/** === SEMANTIC TOKENS === **/
+/* ======================= ***/
+:root {
+  --clr-bg: var(--color-offwhite);
+  --clr-fg: var(--color-white);
+  --clr-txt: var(--color-offblack);
+  --clr-line: var(--color-black);
+
+  --fnt-sans: var(--font-humanist);
+  --fnt-script: var(--font-handwritten);
+  --fnt-serif: var(--font-transitional);
+  --fnt-mono: var(--font-code);
+}

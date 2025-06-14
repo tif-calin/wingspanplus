@@ -1,6 +1,9 @@
-import { type RouteConfig, index, route } from "@react-router/dev/routes";
+import { type RouteConfig, index, layout, route } from "@react-router/dev/routes";
 
 export default [
-  index("pages/home/index.ts"),
-  route('taxalink', 'pages/taxalink/index.ts'),
+  layout('pages/layout.tsx', [
+    index("pages/home/index.ts"),
+    route('taxalink', 'pages/taxalink/index.ts'),
+    route('makecard', 'pages/makecard/index.ts'),
+  ]),
 ] satisfies RouteConfig;

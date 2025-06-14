@@ -3,46 +3,11 @@ import { styled } from "@linaria/react";
 import ExternalLink from '../../components/ExternalLink';
 import DATA from '../../data/cards';
 
-const Page = styled.div`
-  display: flex;
-   align-items: center;
-   flex-direction: column;
-   gap: 0.5rem;
-  margin: auto;
-  min-height: 100vh;
-  padding: 1rem;
-
-  & > *:where(header, main, footer) {
-    border: 1px solid var(--clr-line);
-     border-radius: 0.125rem;
-    background-color: var(--clr-fg);
-    padding: 1rem;
-    width: 100%;
-     max-width: min(calc(80ch + 20%), calc(100vw - 4rem));
-     min-width: 250px;
-  }
-
-  & > main {
-    display: flex;
-     flex-direction: column;
-     gap: 1rem;
-    flex-grow: 1;
-
-    --shadow-color: 0deg 0% 80%;
-    box-shadow: var(--shadow-inset-medium), inset 0 0 2px hsl(var(--shadow-color));
-  }
-
-  & > .disclaimer {
-    font-size: 0.75rem;
-    font-weight: 200;
-  }
-`;
-
 interface Props {};
 
 const HomePage = (_: Props): React.ReactElement => {
   return (
-    <Page>
+    <>
       <header>
         <h1>WingspanPlus</h1>
       </header>
@@ -71,10 +36,7 @@ const HomePage = (_: Props): React.ReactElement => {
           15 of the 42 orders are not represented at all in Wingspan. The largest of these is Tinamiformes which contains 47 species tinamous. They are ground-dwelling and usually quite sedentary ratites from South and Central America.
         </p>
       </main>
-      <footer className="disclaimer">
-        WingspanPlusPlus a fan project and has no official connection with Wingspan or Stonemaier Games.
-      </footer>
-    </Page>
+    </>
   );
 };
 

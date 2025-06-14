@@ -1,6 +1,5 @@
 @import url("./reset.css");
-@import url("./open-color.css");
-@import url("./shadow-palette.css");
+@import url("./variables.css");
 
 :root {
   --font-sans: "Josefin Sans", sans-serif;
