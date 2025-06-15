@@ -1,16 +1,9 @@
 import { styled } from '@linaria/react';
-
-type Food = 'fish' | 'fruit' | 'invertebrate' | 'nectar' | 'no-food' | 'rodent' | 'seed' | 'wild';
-type PowerTag = 'bonus-card' | 'flocking' | 'predator';
-type Nest = 'bowl' | 'cavity' | 'ground' | 'platform' | 'star';
-type Habitat = 'forest' | 'grassland' | 'wetland';
-
-type InlineText = 'dice' | 'egg';
-type Ui = 'smallegg' | 'point' | 'wingspan';
+import type { FoodEnum, HabitatEnum, InlineTextEnum, NestEnum, PowerTagEnum, UiEnum } from '../types';
 
 type Props = {
   altText: string;
-  icon: Food | PowerTag | Nest | Habitat | InlineText | Ui;
+  icon: FoodEnum | PowerTagEnum | NestEnum | HabitatEnum | InlineTextEnum | UiEnum;
 };
 
 const Wrapper = styled.picture`

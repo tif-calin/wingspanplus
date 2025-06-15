@@ -22,7 +22,7 @@ const Wrapper = styled.div`
   box-shadow: var(--shadow-elevation-medium), inset 0 0 2px hsl(var(--shadow-color));
   display: flex;
    flex-direction: column;
-  font-size: 3mm;
+  font-size: 2.9mm;
   height: var(--height);
    width: var(--width);
   overflow: hidden;
@@ -72,6 +72,7 @@ const MiddleRow = styled.div`
   width: 100%;
 
   & .wingspan {
+    margin-right: 3.75mm;
     filter: drop-shadow(0 0 0.1mm #f6f6f2);
     position: absolute;
      bottom: 0;
@@ -110,18 +111,18 @@ const BottomRow = styled.div`
 
 type Props = {
   flavor?: string;
-  habitats: ('forest' | 'grassland' | 'wetland')[];
   nameCommon: string;
   nameLatin: string;
   // TODO: move logic to BirdImage component and make this photo?: ComponentProps<typeof BirdImage>
   photo?: { url: string; removeBg?: boolean; scale?: number; translateX?: number; translateY?: number };
   power?: ComponentProps<typeof Power>;
   wingspan: number | '*';
-} & ComponentProps<typeof LeftSideBarInfo>;
+} & ComponentProps<typeof LeftSideBarInfo> & ComponentProps<typeof HabitatInfo>;
 
 const WingspanCard = React.memo(({
   eggCapacity,
   flavor,
+  foodCost,
   habitats,
   nameCommon,
   nameLatin,
@@ -142,7 +143,7 @@ const WingspanCard = React.memo(({
   return (
     <Wrapper>
       <UpperRow>
-        <HabitatInfo habitats={habitats} />
+        <HabitatInfo foodCost={foodCost} habitats={habitats} />
         <CardName>
           <span className="title">{nameCommon}</span>
           <span className="latin">{nameLatin}</span>

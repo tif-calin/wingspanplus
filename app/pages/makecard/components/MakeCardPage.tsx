@@ -24,6 +24,7 @@ const EXAMPLES = [
   {
     eggCapacity: 4,
     flavor: 'The Muscovy is the only domestic duck breed whose ancestors are not mallards.',
+    foodCost: '[invertebrate] / [seed]',
     habitats: ['wetland'],
     nameCommon: 'Mallard',
     nameLatin: 'Anas platyrhynchos', // https://navarog.github.io/wingsearch/card/166
@@ -42,6 +43,8 @@ const EXAMPLES = [
   },
   {
     eggCapacity: 2,
+    flavor: 'Male buzzards make a spectacular breeding display, flying high then spiraling down over and over.',
+    foodCost: '[rodent]', // TODO: support asterisks in food costs
     habitats: ['forest', 'grassland', 'wetland'],
     nameCommon: 'Common Buzzard',
     nameLatin: 'Buteo buteo', // https://navarog.github.io/wingsearch/card/78
@@ -61,6 +64,8 @@ const EXAMPLES = [
   },
   {
     eggCapacity: 3,
+    flavor: 'The oldest known Canada Goose was at least 33 years old.',
+    foodCost: '[seed] + [seed]',
     habitats: ['grassland', 'wetland'],
     nameCommon: 'Canada Goose',
     nameLatin: 'Branta canadensis', // https://navarog.github.io/wingsearch/card/60

@@ -1,5 +1,6 @@
 import { styled } from '@linaria/react';
-import Icon from '../Icon';
+import type { FoodEnum, HabitatEnum } from '../../types';
+import TextWithIcons from './TextWithIcons';
 
 const Container = styled.div`
   background-color: #c7c1b3;
@@ -39,24 +40,18 @@ const HabitatIcon = styled.picture`
   width: 45%;
 `;
 
-const FoodRow = styled.span`
-  font-size: 0.5rem;
-  display: inline-flex;
-   align-items: center;
-  padding-top: auto;
+const FoodRow = styled(TextWithIcons)``;
 
-  & *:is(img, picture) {
-    display: inline;
-    vertical-align: middle;
-    width: 2.8mm;
-  }
-`;
+type FoodCost = `[${FoodEnum}]`;
+type FoodStringSplit = ' + ' | ' / ';
+type FoodString = `${FoodCost}${`${FoodStringSplit}${FoodCost}` | ''}`
 
 type Props = {
-  habitats: ('forest' | 'grassland' | 'wetland')[];
+  foodCost: FoodString;
+  habitats: HabitatEnum[];
 };
 
-const HabitatInfo = ({ habitats }: Props) => {
+const HabitatInfo = ({ foodCost, habitats }: Props) => {
   return (
     <Container>
       <div>
@@ -69,11 +64,7 @@ const HabitatInfo = ({ habitats }: Props) => {
           </HabitatIcon>
         ))}
       </div>
-      <FoodRow>
-        <Icon altText="seed food" icon="seed" />
-        +
-        <Icon altText="rodent food" icon="rodent" />
-      </FoodRow>
+      <FoodRow text={foodCost.replaceAll(' ', '')} />
     </Container>
   );
 };

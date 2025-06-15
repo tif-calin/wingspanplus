@@ -17,6 +17,12 @@ const Wrapper = styled.div`
   }
 `;
 
+const PowerText = styled.span`
+  & img {
+    filter: drop-shadow(0 0 0.3mm #fff) brightness(0.95);
+  }
+`;
+
 type Props = {
   kind: 'WHEN ACTIVATED' | 'ONCE BETWEEN TURNS' | 'WHEN PLAYED' | 'ROUND END' | 'GAME END';
   text: string;
@@ -25,7 +31,7 @@ type Props = {
 const Power = ({ text, kind }: Props) => {
   return (
     <Wrapper>
-      <span>{kind}</span>: <TextWithIcons text={text} />
+      <span>{kind}</span>: <PowerText><TextWithIcons text={text} /></PowerText>
     </Wrapper>
   );
 };
