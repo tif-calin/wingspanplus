@@ -45,7 +45,7 @@ const CardName = styled.div`
    justify-content: center;
   background-color: #f5f6f1;
   border-style: solid none solid solid;
-   border-width: 0.5px;
+   border-width: 0.15mm;
   flex-grow: 1;
   line-height: 1;
   text-align: center;
@@ -54,6 +54,7 @@ const CardName = styled.div`
 
   & > *.title {
     display: block;
+    font-family: var(--fnt-hand);
     font-size: 3.5mm;
     font-weight: 700;
     width: 100%;

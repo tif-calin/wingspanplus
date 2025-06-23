@@ -1,10 +1,10 @@
 import { styled } from '@linaria/react';
 import type { FoodEnum, HabitatEnum } from '../../types';
-import TextWithIcons from './TextWithIcons';
+import TextWithInlineIcons from './TextWithInlineIcons';
 
 const Container = styled.div`
   background-color: #c7c1b3;
-  border: .5px solid #74685e;
+  border: 0.15mm solid #74685e;
    border-top-style: none;
   border-radius: 1mm;
    border-top-left-radius: 0;
@@ -28,19 +28,21 @@ const Container = styled.div`
 
     & > *:nth-child(3) {
       position: absolute;
-      bottom: calc(25% + 1.5px);
-      left: calc(25% + 1.5px);
+      bottom: calc(25% + 0.4mm);
+      left: calc(25% + 0.4mm);
     }
   }
   & > *:last-child { height: 35%; }
 `;
 
 const HabitatIcon = styled.picture`
-  padding: 1px;
+  padding: 0.25mm;
   width: 45%;
 `;
 
-const FoodRow = styled(TextWithIcons)``;
+const FoodRow = styled(TextWithInlineIcons)`
+  font-weight: 700;
+`;
 
 type FoodCost = `[${FoodEnum}]`;
 type FoodStringSplit = ' + ' | ' / ';

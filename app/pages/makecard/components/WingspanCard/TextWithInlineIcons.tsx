@@ -45,7 +45,7 @@ const Wrapper = styled.span`
  *
  * @example "Draw a [card]."
  */
-const TextWithIcons = ({ text }: Props) => {
+const TextWithInlineIcons = ({ text }: Props) => {
   const parsed = useMemo<ReactNode[]>(() => {
     return text.split(SPECIAL_REGEX).map((part, index) => {
 
@@ -57,4 +57,4 @@ const TextWithIcons = ({ text }: Props) => {
   return <Wrapper>{parsed}</Wrapper>;
 };
 
-export default TextWithIcons;
+export default TextWithInlineIcons;

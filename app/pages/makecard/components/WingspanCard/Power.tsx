@@ -1,5 +1,5 @@
 import { styled } from '@linaria/react';
-import TextWithIcons from './TextWithIcons';
+import TextWithInlineIcons from './TextWithInlineIcons';
 
 const Wrapper = styled.div`
   background: rgb(var(--power-color-brown));
@@ -31,7 +31,7 @@ type Props = {
 const Power = ({ text, kind }: Props) => {
   return (
     <Wrapper>
-      <span>{kind}</span>: <PowerText><TextWithIcons text={text} /></PowerText>
+      <span>{kind}</span>: <PowerText><TextWithInlineIcons text={text} /></PowerText>
     </Wrapper>
   );
 };

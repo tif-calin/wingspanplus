@@ -10,7 +10,7 @@ const Wrapper = styled.div`
   display: flex;
    align-items: center;
    flex-direction: column;
-   gap: 1.5mm;
+   gap: 0.5mm;
   margin-left: 3.75mm;
   padding-top: 8.5mm;
   position: absolute;
@@ -28,7 +28,7 @@ const Wrapper = styled.div`
     font-size: 2.1em;
     font-weight: 700;
     line-height: 1;
-    margin-bottom: 1.5mm;
+    margin-bottom: 3mm;
     width: 100%;
 
     & > picture {
