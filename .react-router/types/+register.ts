@@ -8,6 +8,5 @@ declare module "react-router" {
 
 type Params = {
   "/": {};
-  "/taxalink": {};
   "/makecard": {};
 };

@@ -1,7 +1,6 @@
 import React from 'react';
-import { styled } from "@linaria/react";
 import ExternalLink from '../../components/ExternalLink';
-import DATA from '../../data/cards';
+import { Link } from 'react-router';
 
 interface Props {};
 
@@ -9,13 +8,16 @@ const HomePage = (_: Props): React.ReactElement => {
   return (
     <>
       <header>
-        <h1>WingspanPlus</h1>
+        <h1>Wingfanz</h1>
       </header>
       <main>
         <p>
           This is the home page for <ExternalLink href="https://culi.page/">Culi&apos;s</ExternalLink> helper site for <ExternalLink href="https://boardgamegeek.com/boardgame/266192/wingspan">the Wingspan boardgame</ExternalLink>.
         </p>
         <p>
+          Check out <Link to="/makecard">the card maker</Link> to create your own custom bird cards!
+        </p>
+        {/* <p>
           There are <ExternalLink href="https://www.catalogueoflife.org/data/taxon/V2">10,599 species of birds in 230 families described in the Catalogue of Life</ExternalLink>. For comparison, there&apos;s 6,025 species across 161 families  of <ExternalLink href="https://www.catalogueoflife.org/data/taxon/6224G">mammals</ExternalLink>. <ExternalLink href="https://www.catalogueoflife.org/data/taxon/45C">Reptiles</ExternalLink> have 11,300 species described but only 73 families. The 230 families of birds are divided into 42 orders with Passiformes containing 59.4% of all bird species (the second largest order, Apodiformes, only contains 4.6% of all birds! Apodiformes contains swifts, treeswifts, and hummingbirds).
         </p>
         <p>
@@ -34,7 +36,7 @@ const HomePage = (_: Props): React.ReactElement => {
         </p>
         <p>
           15 of the 42 orders are not represented at all in Wingspan. The largest of these is Tinamiformes which contains 47 species tinamous. They are ground-dwelling and usually quite sedentary ratites from South and Central America.
-        </p>
+        </p> */}
       </main>
     </>
   );
