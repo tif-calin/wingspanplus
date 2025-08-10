@@ -3,7 +3,12 @@
   "url": "https://github.com/tif-calin/wingspanplus",
   "version": "0.2.0",
   "private": true,
-  "scripts": { "dev": "vite", "build": "tsc -b && vite build", "lint": "eslint .", "preview": "vite preview" },
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "lint": "eslint .",
+    "preview": "vite preview"
+  },
   "dependencies": {
     "@imgly/background-removal": "^1.6.0",
     "@linaria/babel-preset": "^5.0.4",

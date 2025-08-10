@@ -42,3 +42,7 @@ lerna-debug.log*
 
 # local files
 *.local
+
+# temp files
+assets/temp/*
+!.keep
