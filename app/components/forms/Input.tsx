@@ -57,16 +57,19 @@ type Props = {
   fieldTitle?: string;
   /** @default "text" */
   inputType: HTMLInputTypeAttribute;
+  /** Success state turns label text green. */
+  isValid?: boolean;
 };
 
 const Input = (props: Props) => {
   const {
     inputType = 'text',
+    isValid = true,
   } = props;
 
   return (
     <InputStyled>
-      <input type={inputType} placeholder="&nbsp;" />
+      <input name={props.fieldName} type={inputType} placeholder="&nbsp;" />
       <legend>{props.fieldTitle || props.fieldName}</legend>
     </InputStyled>
   );

@@ -91,7 +91,10 @@ const EXAMPLES = [
 const MakeCardPage = () => {
   return (
     <>
-      <header><h1>makecard</h1></header>
+      <header><h1>WingFanz Card Maker</h1></header>
+      <Content>
+        <FormCardCreator />
+      </Content>
       <Content>
         <div className="gallery">
           {EXAMPLES.map(bird => (
