@@ -28,10 +28,10 @@
   --clr-txt: var(--color-offblack);
   --clr-line: var(--color-black);
 
-  --fnt-condensed: 'Barlow Condensed', 'Futura Condensed', var(--font-industrial); /* https://fonts.google.com/specimen/Barlow+Condensed */
-  --fnt-hand: 'Patrick Hand', 'Cardenio Modern', var(--font-handwritten); /* https://fonts.google.com/specimen/Patrick+Hand */
+  --fnt-condensed: 'Futura Condensed', 'Barlow Condensed', var(--font-industrial); /* https://fonts.google.com/specimen/Barlow+Condensed */
+  --fnt-hand: 'Cardenio Modern', 'Patrick Hand', var(--font-handwritten); /* https://fonts.google.com/specimen/Patrick+Hand */
   --fnt-mono: var(--font-code);
   --fnt-sans: var(--font-humanist);
-  --fnt-script: 'Satisfy', 'Thirsty Rough', var(--font-handwritten); /* https://fonts.google.com/specimen/Satisfy */
+  --fnt-script: 'Thirsty Rough', 'Satisfy', var(--font-handwritten); /* https://fonts.google.com/specimen/Satisfy */
   --fnt-serif: var(--font-transitional);
 }

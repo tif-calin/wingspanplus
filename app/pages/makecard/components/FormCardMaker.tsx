@@ -3,6 +3,7 @@ import Input from '~/components/forms/Input';
 import WingspanCard from './WingspanCard';
 
 const Container = styled.div`
+  font-size: 1rem;
   display: flex;
    gap: 1rem;
   width: 100%;

@@ -35,8 +35,9 @@ type Props = {
 const Wrapper = styled.span`
   & img {
     display: inline-block;
-    width: 1em;
+    line-height: 0;
     vertical-align: sub;
+    width: 1em;
   }
 `;
 

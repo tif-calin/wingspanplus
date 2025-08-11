@@ -25,6 +25,7 @@ const Wrapper = styled.div`
 
   & .victory-points {
     position: relative;
+    font-family: var(--fnt-hand);
     font-size: 2.1em;
     font-weight: 700;
     line-height: 1;
@@ -33,8 +34,8 @@ const Wrapper = styled.div`
 
     & > picture {
       position: absolute;
-      top: -1.75mm;
-      right: -1.5mm;
+      top: -1.5mm;
+      right: -1.25mm;
       bottom: 0;
 
       & img {
