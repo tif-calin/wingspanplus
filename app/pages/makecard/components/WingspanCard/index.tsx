@@ -89,6 +89,10 @@ const MiddleRow = styled.div`
     right: 0;
     z-index: 1;
   }
+
+  & .wingspan, .eggs, .nest, .victory-points {
+    filter: drop-shadow(0 0 1mm #f6f6f2);
+  }
 `;
 
 const BottomRow = styled.div`
@@ -102,11 +106,11 @@ const BottomRow = styled.div`
   & .flavor {
     flex-grow: 1;
     display: flex;
-    align-items: flex-end;
     font-style: italic;
     font-size: 2mm;
     line-height: 1;
-    padding: 0 2.5mm;
+    min-height: 8mm;
+    padding: 1mm 2.5mm;
   }
 `;
 
@@ -127,6 +131,7 @@ const WingspanCard = React.memo(({
   habitats,
   nameCommon,
   nameLatin,
+  nestKind,
   photo,
   power,
   victoryPoints,
@@ -151,7 +156,7 @@ const WingspanCard = React.memo(({
         </CardName>
       </UpperRow>
       <MiddleRow>
-        <LeftSideBarInfo eggCapacity={eggCapacity} victoryPoints={victoryPoints} />
+        <LeftSideBarInfo eggCapacity={eggCapacity} nestKind={nestKind} victoryPoints={victoryPoints} />
         <BirdImage
           imageSrc={imageSrc}
           altText={`bird photo of ${nameCommon}`}

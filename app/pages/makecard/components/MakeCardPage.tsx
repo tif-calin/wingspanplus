@@ -32,11 +32,13 @@ const EXAMPLES = [
     habitats: ['wetland'],
     nameCommon: 'Mallard',
     nameLatin: 'Anas platyrhynchos', // https://navarog.github.io/wingsearch/card/166
+    nestKind: 'ground',
     photo: {
       removeBg: true,
       scale: 0.9,
       translateX: 7,
       url: 'https://inaturalist-open-data.s3.amazonaws.com/photos/441914849/original.jpg',
+      // url:  './assets/temp/8B68DE92-C20E-478F-BCC9-F562CDF83876.JPG',
     },
     power: {
       kind: 'WHEN ACTIVATED',
@@ -52,8 +54,9 @@ const EXAMPLES = [
     habitats: ['forest', 'grassland', 'wetland'],
     nameCommon: 'Common Buzzard',
     nameLatin: 'Buteo buteo', // https://navarog.github.io/wingsearch/card/78
+    nestKind: 'platform',
     photo: {
-      removeBg: true,
+      removeBg: false,
       scale: 1.3,
       translateX: 10,
       translateY: -5,
@@ -73,6 +76,7 @@ const EXAMPLES = [
     habitats: ['grassland', 'wetland'],
     nameCommon: 'Canada Goose',
     nameLatin: 'Branta canadensis', // https://navarog.github.io/wingsearch/card/60
+    nestKind: 'ground',
     photo: {
       removeBg: true,
       scale: 0.92,

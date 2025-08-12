@@ -1,11 +1,6 @@
 import { styled } from '@linaria/react';
 import Icon from '../Icon';
 
-type Props = {
-  eggCapacity: number;
-  victoryPoints: number;
-};
-
 const Wrapper = styled.div`
   display: flex;
    align-items: center;
@@ -53,7 +48,13 @@ const Wrapper = styled.div`
   }
 `;
 
-const LeftSideBarInfo = ({ eggCapacity, victoryPoints }: Props) => {
+type Props = {
+  eggCapacity: number;
+  nestKind: 'bowl' | 'cavity' | 'ground' | 'platform' | 'star' | null;
+  victoryPoints: number;
+};
+
+const LeftSideBarInfo = ({ eggCapacity, nestKind, victoryPoints }: Props) => {
 
   return (
     <Wrapper>
@@ -61,14 +62,18 @@ const LeftSideBarInfo = ({ eggCapacity, victoryPoints }: Props) => {
         {victoryPoints}
         <Icon icon="point" altText="feather for victory points" />
       </div>
-      <div className="nest">
-        <Icon altText="nest" icon="bowl" />
-      </div>
-      <div className="eggs">
-        {Array.from({ length: eggCapacity }, (_, i) => (
-          <Icon key={i} altText="egg" icon="smallegg" />
-        ))}
-      </div>
+      {!!nestKind && (
+        <>
+          <div className="nest">
+            <Icon altText="nest" icon={nestKind} />
+          </div>
+          <div className="eggs">
+            {Array.from({ length: eggCapacity }, (_, i) => (
+              <Icon key={i} altText="egg" icon="smallegg" />
+            ))}
+          </div>
+        </>
+      )}
     </Wrapper>
   );
 };
