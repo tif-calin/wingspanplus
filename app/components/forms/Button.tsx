@@ -8,12 +8,19 @@ const StyledButton = styled.button`
 
 type Props = {
   children: React.ReactNode;
-};
+  className?: string;
+} & React.ButtonHTMLAttributes<HTMLButtonElement>;
 
 const Button = (props: Props) => {
+  const {
+    className,
+    children,
+    ...buttonAttrs
+  } = props;
+
   return (
-    <StyledButton>
-      {props.children}
+    <StyledButton className={className} {...buttonAttrs}>
+      {children}
     </StyledButton>
   );
 };

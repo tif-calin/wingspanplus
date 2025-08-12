@@ -2,6 +2,7 @@ import { styled } from '@linaria/react';
 import WingspanCard from './WingspanCard';
 import type { ComponentProps } from 'react';
 import FONTS from '../utils/fonts';
+import FormCardCreator from './FormCardMaker';
 
 const Content = styled.main`
   ${FONTS}

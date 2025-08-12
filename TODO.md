@@ -1,5 +1,3 @@
-## Tagged TODOs
-- [ ] BTN0: Add a way to overwrite button styling while utilizing the React component.
 
 ## Big TODOs
 - Card editor

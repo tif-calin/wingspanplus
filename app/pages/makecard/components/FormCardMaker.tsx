@@ -4,10 +4,10 @@ import WingspanCard from './WingspanCard';
 import { memo, useState, type DOMAttributes } from 'react';
 import Button from '~/components/forms/Button';
 import { matchLatinName } from '../utils/http/checklistbank';
+import Taxonomy from './CardMakerForm/Taxonomy';
+import { css } from '@linaria/core';
 
-// TODO(BTN0): figure out if Linaria can take in the actual component :(
-//             e.g. the way styled-components does `styled(Button)`
-const StyledButton = styled(Button.Styled)`
+const buttonStyles = css`
   align-self: flex-end;
   background-color: hsl(178, 43%, 40%);
   color: white;
@@ -34,13 +34,14 @@ const FormWrapper = styled.form`
   --black: #273f3f;
   --offwhite: #fcfcfc;
 
-  border-left: 1px solid var(--black);
-  flex-grow: 1;
-  height: 100%;
-  position: relative;
-  padding: 1rem;
-  gap: 0.75rem;
   background-color: var(--offwhite);
+  border: 2px solid var(--black);
+   border-radius: 0.15rem;
+  height: 100%;
+  padding: 1rem;
+  position: relative;
+   flex-grow: 1;
+   gap: 0.75rem;
 
   display: flex;
    flex-direction: column;
@@ -90,16 +91,9 @@ const FormCardCreator = () => {
       </Preview>
       <FormWrapper action={console.log}>
         <Input inputType="text" fieldName="nameLatin" fieldTitle="Latin Name" />
-        <StyledButton type="button" onClick={handleValidateLatin}>validate &rarr;</StyledButton>
-        {!!classification.length && <span style={{ fontSize: '0.8rem' }}>
-            {classification.map((name, index) => {
-              const isLast = index === classification.length - 1;
-
-              return (
-                <span key={name} style={isLast ? { fontStyle: 'italic' } : {}}>{name}{isLast ? '' : ' > '}</span>
-              );
-            })}
-        </span>}
+        <Button className={buttonStyles} type="button" onClick={handleValidateLatin}>validate &rarr;</Button>
+        <Taxonomy classification={classification} />
+        {/* <Input inputType="text" fieldName="nameCommon" fieldTitle="Common Name" /> */}
       </FormWrapper>
     </Container>
   );
