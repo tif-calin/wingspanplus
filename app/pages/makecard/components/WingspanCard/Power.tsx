@@ -17,7 +17,7 @@ const Wrapper = styled.div`
    align-items: center;
   font-family: var(--fnt-condensed);
   line-height: 1;
-  min-height: 16mm;
+  min-height: 16mm; // TODO: DSM mode makes this variable instead of fixed?
 
   & > span:first-child {
     font-weight: 500;

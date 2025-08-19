@@ -2,9 +2,9 @@ import { styled } from '@linaria/react';
 import WingspanCard from './WingspanCard';
 import type { ComponentProps } from 'react';
 import FONTS from '../utils/fonts';
-import FormCardCreator from './FormCardMaker';
+import FormCardCreator from './CardMakerForm';
 
-const Content = styled.main`
+const Content = styled.div`
   ${FONTS}
 
   display: flex;
@@ -34,7 +34,7 @@ const EXAMPLES = [
     nameLatin: 'Anas platyrhynchos', // https://navarog.github.io/wingsearch/card/166
     nestKind: 'ground',
     photo: {
-      removeBg: true,
+      removeBg: false,
       scale: 0.9,
       translateX: 7,
       url: 'https://inaturalist-open-data.s3.amazonaws.com/photos/441914849/original.jpg',
@@ -97,10 +97,10 @@ const MakeCardPage = () => {
   return (
     <>
       <header><h1>WingFanz Card Maker</h1></header>
-      <Content>
+      <Content className='island'>
         <FormCardCreator />
       </Content>
-      <Content>
+      <Content className='island'>
         <div className="gallery">
           {EXAMPLES.map(bird => (
             <WingspanCard key={bird.nameCommon} {...bird} />

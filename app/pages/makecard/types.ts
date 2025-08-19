@@ -13,4 +13,12 @@ type InlineTextEnum = (typeof InlineTextEnum)[number];
 const UiEnum = ['smallegg', 'point', 'wingspan', ] as const;
 type UiEnum = (typeof UiEnum)[number];
 
+// type Keyword = FoodEnum | PowerTagEnum | NestEnum | HabitatEnum | InlineTextEnum | UiEnum;
+// const SYNONYMS: Record<Keyword, string[]> = {
+//   'bonus-card': ['bonus'],
+//   card: ['bird'],
+//   dice: ['die'],
+//   wild: ['food']
+// };
+
 export type { FoodEnum, PowerTagEnum, NestEnum, HabitatEnum, InlineTextEnum, UiEnum };

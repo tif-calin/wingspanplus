@@ -28,7 +28,7 @@
   --clr-txt: var(--color-offblack);
   --clr-line: var(--color-black);
 
-  --fnt-condensed: 'Futura Condensed', 'Barlow Condensed', var(--font-industrial); /* https://fonts.google.com/specimen/Barlow+Condensed */
+  --fnt-condensed: 'Futura Condensed', 'Futura PT Condensed', 'Barlow Condensed', var(--font-industrial); /* https://fonts.google.com/specimen/Barlow+Condensed */
   --fnt-hand: 'Cardenio Modern', 'Patrick Hand', var(--font-handwritten); /* https://fonts.google.com/specimen/Patrick+Hand */
   --fnt-mono: var(--font-code);
   --fnt-sans: var(--font-humanist);

@@ -2,15 +2,13 @@ import React from 'react';
 import ExternalLink from '../../components/ExternalLink';
 import { Link } from 'react-router';
 
-interface Props {};
-
-const HomePage = (_: Props): React.ReactElement => {
+const HomePage = () => {
   return (
     <>
       <header>
         <h1>Wingfanz</h1>
       </header>
-      <main>
+      <main className='island'>
         <p>
           This is the home page for <ExternalLink href="https://culi.page/">Culi&apos;s</ExternalLink> helper site for <ExternalLink href="https://boardgamegeek.com/boardgame/266192/wingspan">the Wingspan boardgame</ExternalLink>.
         </p>

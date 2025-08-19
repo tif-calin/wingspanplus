@@ -10,18 +10,18 @@ const Page = styled.div`
   min-height: 100vh;
   padding: 1rem;
 
-  & > *:where(header, main, footer) {
+  & > *:where(header, .island, footer) {
     --shadow-color: 0deg 0% 80%;
      box-shadow: var(--shadow-inset-medium), inset 0 0 2px hsl(var(--shadow-color));
     background-color: var(--clr-fg);
     border-radius: 0.125rem;
     padding: 1rem;
     width: 100%;
-     max-width: min(calc(250px + 40%), calc(100vw - 4rem));
-     min-width: 250px;
+     max-width: min(calc(275px + 55%), calc(100vw - 4rem));
+     min-width: 275px;
   }
 
-  & > main {
+  & > .island {
     display: flex;
      flex-direction: column;
      gap: 1rem;

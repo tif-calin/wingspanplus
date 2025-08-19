@@ -93,6 +93,10 @@ const MiddleRow = styled.div`
   & .wingspan, .eggs, .nest, .victory-points {
     filter: drop-shadow(0 0 1mm #f6f6f2);
   }
+
+  & .nest picture {
+    opacity: 0.8;
+  }
 `;
 
 const BottomRow = styled.div`
@@ -144,7 +148,7 @@ const WingspanCard = React.memo(({
     if (imageSrc) return;
     if (photo?.removeBg) removeBackgroundFromUrl(photo?.url).then(setImageSrc);
     else setImageSrc(photo?.url);
-  }, []);
+  }, [imageSrc, photo?.removeBg, photo?.url]);
 
   return (
     <Wrapper>
