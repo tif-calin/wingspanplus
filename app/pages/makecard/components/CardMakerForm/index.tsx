@@ -8,6 +8,8 @@ import { css } from '@linaria/core';
 import useCardMakerForm from './useCardMakerForm';
 import type { FanmadeBirdRow, OfficialBirdRow } from '~/data/official-birds';
 import InfoSection from './InfoSection';
+import type getWikiData from '~/utils/http/getWikiData';
+import StyledExternalLink from '~/components/ExternalLink';
 
 const buttonStyles = css`
   align-self: flex-end;
@@ -48,6 +50,25 @@ const FormWrapper = styled.form`
    flex-direction: column;
 `;
 
+const ExternalLinksList = styled.ul`
+  display: flex;
+  padding: 0;
+   padding-left: 1rem;
+  flex-wrap: wrap;
+  gap: 0 0.5rem;
+
+  & > li {
+    width: calc(50% - 1rem);
+
+    & > span:last-child {
+      font-weight: 100;
+
+      &::before { content: '(' }
+      &::after { content: ')' }
+    }
+  }
+`;
+
 const DEFAULT_VALUES: ComponentProps<typeof WingspanCard> = {
   eggCapacity: 3,
   flavor: 'Gadwalls are known for their ability to steal food from diving ducks.',
@@ -60,17 +81,19 @@ const DEFAULT_VALUES: ComponentProps<typeof WingspanCard> = {
   power: { kind: 'ONCE BETWEEN TURNS', text: 'When another player takes the "gain food" action, choose a [wild] they gained from the birdfeeder and cache 1 on this bird from the supply.' },
   victoryPoints: 5,
   wingspan: 25
-}
+};
 
 const CardMakerForm = () => {
   const [classification, setClassification] = useState<string[]>([]);
   const [officialCards, setOfficialCards] = useState<Record<string, OfficialBirdRow[]>>();
   const [fanmadeCards, setFanmadeCards] = useState<FanmadeBirdRow[]>();
+  const [wikiData, setWikiData] = useState<Awaited<ReturnType<typeof getWikiData>>>();
 
   const { handleValidateLatinName } = useCardMakerForm({
     setClassification,
     setOfficialCards,
-    setFanmadeCards
+    setFanmadeCards,
+    setWikiData
   });
 
   return (
@@ -81,7 +104,20 @@ const CardMakerForm = () => {
       <FormWrapper action={console.log}>
         <Input inputType="text" fieldName="nameLatin" fieldTitle="Latin Name" />
         <Button className={buttonStyles} type="button" onClick={handleValidateLatinName}>validate &rarr;</Button>
+        <hr />
         <Taxonomy classification={classification} />
+        {!!wikiData?.identifiers.length && (
+          <InfoSection title={`external links`}>
+            <ExternalLinksList>
+              {wikiData.identifiers.map(link => (
+                <li key={link.id}>
+                  <StyledExternalLink href={link.url}>{link.title}</StyledExternalLink>
+                  {' '}<span>{link.desc}</span>
+                </li>
+              ))}
+            </ExternalLinksList>
+          </InfoSection>
+        )}
         {!!officialCards && (
           Object.entries(officialCards).map(([label, cards], i) => {
             const pluralizedNoun = cards.length === 1 ? 'card' : 'cards';
@@ -90,24 +126,28 @@ const CardMakerForm = () => {
             return (
               <InfoSection key={label} title={displayLabel}>
                 {cards.map((card, i) => (
-                  <a style={{ fontStyle: 'italic' }} key={card.acceptedName} href={card.wingsearchLink}>{card.acceptedName}{i < cards.length - 1 ? ', ' : ''}</a>
+                  <StyledExternalLink style={{ fontStyle: 'italic' }} key={card.acceptedName} href={card.wingsearchLink}>
+                    {card.acceptedName}
+                    {i < cards.length - 1 ? ', ' : ''}
+                  </StyledExternalLink>
                 ))}
               </InfoSection>
             );
           })
         )}
         {!!fanmadeCards?.length && (
-          <InfoSection title={`${fanmadeCards.length} fan-made cards`}>
+          <InfoSection title={`${fanmadeCards.length} fan-made card${fanmadeCards.length === 1 ? '' : 's'}`}>
             {fanmadeCards.map((card, i) => (
-              <Fragment key={card.latin}>
-                <a href={card.source}>{card.common}</a>
+              <Fragment key={card.latin + card.date}>
+                <StyledExternalLink href={card.source}>{card.common}</StyledExternalLink>
                 {' '}by {card.author}
                 {i < fanmadeCards.length - 1 ? ', ' : ''}
               </Fragment>
             ))}
           </InfoSection>
         )}
-        {/* <Input inputType="text" fieldName="nameCommon" fieldTitle="Common Name" /> */}
+        <hr />
+        <Input inputType="text" fieldName="nameCommon" fieldTitle="Common Name" />
       </FormWrapper>
     </Container>
   );

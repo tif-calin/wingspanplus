@@ -34,7 +34,7 @@ const ContentTitle = styled.h2`
    text-align: end;
   text-transform: uppercase;
   white-space: nowrap;
-  width: 50%;
+  width: 25%;
 `;
 
 const EXAMPLES = [
@@ -47,7 +47,7 @@ const EXAMPLES = [
     nameLatin: 'Anas platyrhynchos', // https://navarog.github.io/wingsearch/card/166
     nestKind: 'ground',
     photo: {
-      removeBg: false,
+      removeBg: true,
       scale: 0.9,
       translateX: 7,
       url: 'https://inaturalist-open-data.s3.amazonaws.com/photos/441914849/original.jpg',

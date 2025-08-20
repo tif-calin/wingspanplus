@@ -2,11 +2,13 @@ import { useCallback, type Dispatch, type DOMAttributes, type SetStateAction } f
 import { matchLatinName } from '../../utils/http/checklistbank';
 import { filterObject, objectFromEntries } from '~/utils/objects';
 import type { FanmadeBirdRow, OfficialBirdRow } from '~/data/official-birds';
+import getWikiData from '~/utils/http/getWikiData';
 
 type UseCardMakerFormParams = {
   setClassification: Dispatch<SetStateAction<string[]>>;
   setFanmadeCards: Dispatch<SetStateAction<FanmadeBirdRow[] | undefined>>;
-  setOfficialCards: Dispatch<SetStateAction<Record<string, OfficialBirdRow[]> | undefined>>
+  setOfficialCards: Dispatch<SetStateAction<Record<string, OfficialBirdRow[]> | undefined>>;
+  setWikiData: Dispatch<SetStateAction<Awaited<ReturnType<typeof getWikiData>> | undefined>>;
 };
 
 const findTaxonomy = async (latinName: string) => {
@@ -59,6 +61,7 @@ const useCardMakerForm = ({
   setClassification,
   setFanmadeCards,
   setOfficialCards,
+  setWikiData,
 }: UseCardMakerFormParams) => {
   const handleValidateLatinName = useCallback<NonNullable<DOMAttributes<HTMLButtonElement>['onClick']>>(
     async (ev) => {
@@ -80,8 +83,11 @@ const useCardMakerForm = ({
 
       const fanmadeCards = await findFanmadeCards(latinName, speciesName);
       setFanmadeCards(fanmadeCards);
+
+      const wikidata = await getWikiData(latinName);
+      setWikiData(wikidata);
     },
-    [setClassification, setFanmadeCards, setOfficialCards]
+    [setClassification, setFanmadeCards, setOfficialCards, setWikiData]
   );
 
   return { handleValidateLatinName };

@@ -44,7 +44,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
     <Page>
       <header className='island'>
         <a href="/">
-          <h1>Wingfanz</h1>
+          <h1>WingFans</h1>
         </a>
       </header>
       <main>
