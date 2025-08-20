@@ -2,7 +2,7 @@ import { styled } from '@linaria/react';
 import TextWithInlineIcons from './TextWithInlineIcons';
 import { useMemo } from 'react';
 
-const Wrapper = styled.div`
+const PowerWrapper = styled.div`
   /* TODO: DSM mode for background */
   /* s2.svgbox.net/pen-brushes.svg?ic=brush-6&color=ffff43 */
   /* background: rgb(var(--power-color-brown));
@@ -48,9 +48,9 @@ const Power = ({ text, kind }: Props) => {
   const style = useMemo(() => color ? { backgroundImage: `url("/assets/${color}.png")` } : undefined, [color]);
 
   return (
-    <Wrapper style={style}>
+    <PowerWrapper style={style}>
       <span>{kind}</span>: <PowerText><TextWithInlineIcons text={text} /></PowerText>
-    </Wrapper>
+    </PowerWrapper>
   );
 };
 
