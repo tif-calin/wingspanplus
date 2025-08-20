@@ -57,7 +57,7 @@ const DEFAULT_VALUES: ComponentProps<typeof WingspanCard> = {
   nameLatin: "Mareca strepera",
   nestKind: "ground",
   photo: { url: 'https://inaturalist-open-data.s3.amazonaws.com/photos/395500578/original.jpg', removeBg: true, scale: 1.2, translateX: 10, translateY: -5 },
-  power: { kind: 'WHEN ACTIVATED', text: 'Choose 1 other player. You both draw 1 [card] from the deck.' },
+  power: { kind: 'ONCE BETWEEN TURNS', text: 'When another player takes the "gain food" action, choose a [wild] they gained from the birdfeeder and cache 1 on this bird from the supply.' },
   victoryPoints: 5,
   wingspan: 25
 }

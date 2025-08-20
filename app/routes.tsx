@@ -4,5 +4,6 @@ export default [
   layout('pages/layout.tsx', [
     index("pages/home/index.ts"),
     route('makecard', 'pages/makecard/index.ts'),
+    route('stats', 'pages/stats/index.tsx'),
   ]),
 ] satisfies RouteConfig;

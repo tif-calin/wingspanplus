@@ -96,7 +96,6 @@ const EXAMPLES = [
 const MakeCardPage = () => {
   return (
     <>
-      <header><h1>WingFanz Card Maker</h1></header>
       <Content className='island'>
         <FormCardCreator />
       </Content>

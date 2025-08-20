@@ -1,15 +1,30 @@
 
 ## Big TODOs
 - [~] Card previewer
-  - [x] power colors
-  - [ ] distribution maps
-  - [ ] expansion codes
-  - [ ] 'fan-made' disclaimer
+  - [x] top row
+    - [x] name
+    - [x] habitat
+    - [x] food cost
+  - [~] middle row
+    - [x] victory points
+    - [x] nest type
+    - [x] egg capacity
+    - [ ] 'fan-made' disclaimer
+    - [x] wingspan
   - [~] photos
     - [x] remove background
     - [x] translateX, translateY, scale
     - [ ] brightness, contrast, saturation
     - [ ] crop
+  - [~] powers
+    - [x] power colors
+    - [ ] tags (predator, flocking, bonus)
+    - [x] text with inline symbols
+      - [ ] handle synonym keywords
+  - [~] bottom row
+    - [ ] distribution maps
+    - [x] flavor text
+    - [ ] expansion codes
 - [~] Card editor
   - [ ] export
     - [ ] Save/load files
