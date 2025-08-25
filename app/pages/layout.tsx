@@ -1,11 +1,12 @@
 import { styled } from '@linaria/react';
 import { Outlet } from 'react-router';
+import RainbowText from '~/components/RainbowText';
 
 const Page = styled.div`
   display: flex;
    align-items: center;
    flex-direction: column;
-   gap: 0.5rem;
+   gap: 1rem;
   margin: auto;
   min-height: 100vh;
   padding: 1rem;
@@ -44,7 +45,9 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
     <Page>
       <header className='island'>
         <a href="/">
-          <h1>WingFans</h1>
+          <h1>
+            <RainbowText text="WingFans" />
+          </h1>
         </a>
       </header>
       <main>
