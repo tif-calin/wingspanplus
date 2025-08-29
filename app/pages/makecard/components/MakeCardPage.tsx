@@ -27,8 +27,8 @@ const Content = styled.div`
 const ContentTitle = styled.h2`
   font-size: 1.25rem;
   position: absolute;
-   right: calc(100% + 1.25em);
-   top: 0px;
+   right: calc(100% + 2.6rem);
+   top: -1rem;
   rotate: -90deg;
    transform-origin: top right;
    text-align: end;
@@ -110,7 +110,9 @@ const MakeCardPage = () => {
   return (
     <>
       <Content className='island'>
-        <ContentTitle>Maker</ContentTitle>
+        <ContentTitle>
+          Maker
+        </ContentTitle>
         <FormCardCreator />
       </Content>
       <Content className='island'>

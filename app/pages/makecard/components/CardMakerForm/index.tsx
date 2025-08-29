@@ -40,6 +40,7 @@ const FormWrapper = styled.form`
   background-color: var(--offwhite);
   border: 2px solid var(--black);
    border-radius: 0.15rem;
+  box-shadow: var(--shadow-elevation-medium), 0 0 2px hsl(var(--shadow-color));
   height: 100%;
   padding: 1rem;
   position: relative;

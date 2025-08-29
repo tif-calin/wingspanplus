@@ -19,7 +19,7 @@ const Wrapper = styled.div`
 
   background-color: #f6f6f2;
   border-radius: 3.5mm;
-  box-shadow: var(--shadow-elevation-medium), inset 0 0 2px hsl(var(--shadow-color));
+  box-shadow: var(--shadow-elevation-medium), 0 0 2px hsl(var(--shadow-color));
   display: flex;
    flex-direction: column;
   font-size: 2.9mm;
@@ -169,7 +169,7 @@ const WingspanCard = React.memo(({
           translateY={photo?.translateY}
         />
         <div className="wingspan">
-          {Number.isFinite(wingspan) ? wingspan : '*'}cm
+          {Number.isFinite(Number(wingspan)) ? wingspan : '*'}cm
           <Icon icon="wingspan" altText="wingspan icon" />
         </div>
       </MiddleRow>

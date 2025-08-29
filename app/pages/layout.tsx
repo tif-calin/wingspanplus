@@ -31,7 +31,9 @@ const Page = styled.div`
      box-shadow: var(--shadow-inset-medium), inset 0 0 2px hsl(var(--shadow-color));
     background-color: var(--clr-fg);
     border-radius: 0.125rem;
-    padding: 1rem;
+    & > * {
+      padding: 1rem;
+    }
   }
 
   & > .disclaimer {
@@ -55,7 +57,9 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
       </main>
       {children}
       <footer className="disclaimer island">
-        WingspanPlusPlus a fan project and has no official connection with Wingspan or Stonemaier Games.
+        <span>
+          WingFans is a fan project and has no official connection with Wingspan or Stonemaier Games.
+        </span>
       </footer>
     </Page>
   )
