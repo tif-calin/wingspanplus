@@ -1,14 +1,30 @@
-import { useCallback, type Dispatch, type DOMAttributes, type SetStateAction } from 'react';
+import { useCallback, useRef, useState, type ComponentProps, type Dispatch, type DOMAttributes, type FormEventHandler, type SetStateAction } from 'react';
 import { matchLatinName } from '../../utils/http/checklistbank';
 import { filterObject, objectFromEntries } from '~/utils/objects';
 import type { FanmadeBirdRow, OfficialBirdRow } from '~/data/official-birds';
 import getWikiData from '~/utils/http/getWikiData';
+import type WingspanCard from '../WingspanCard';
 
 type UseCardMakerFormParams = {
   setClassification: Dispatch<SetStateAction<string[]>>;
   setFanmadeCards: Dispatch<SetStateAction<FanmadeBirdRow[] | undefined>>;
   setOfficialCards: Dispatch<SetStateAction<Record<string, OfficialBirdRow[]> | undefined>>;
   setWikiData: Dispatch<SetStateAction<Awaited<ReturnType<typeof getWikiData>> | undefined>>;
+};
+
+const DEFAULT_VALUES: ComponentProps<typeof WingspanCard> = {
+  eggCapacity: 3,
+  flavor: 'Gadwalls are known for their ability to steal food from diving ducks.',
+  foodCost: '[fish] + [fish]',
+  habitats: ['wetland'],
+  nameCommon: 'Gadwall',
+  nameLatin: "Mareca strepera",
+  nestKind: "ground",
+  // photo: { url: 'https://inaturalist-open-data.s3.amazonaws.com/photos/395500578/original.jpg', removeBg: true, scale: 1.2, translateX: 10, translateY: -5 },
+  photo: { url: 'https://inaturalist-open-data.s3.amazonaws.com/photos/96684139/original.jpg', removeBg: true, scale: 0.8, translateX: 10, translateY: 10 },
+  power: { kind: 'ONCE BETWEEN TURNS', text: 'When another player takes the "gain food" action, choose a [wild] they gained from the birdfeeder and cache 1 on this bird from the supply.' },
+  victoryPoints: 5,
+  wingspan: 90,
 };
 
 const findTaxonomy = async (latinName: string) => {
@@ -63,6 +79,26 @@ const useCardMakerForm = ({
   setOfficialCards,
   setWikiData,
 }: UseCardMakerFormParams) => {
+  const formRef = useRef<HTMLFormElement>(null);
+  const [formValues, setFormValues] = useState(DEFAULT_VALUES);
+
+  const handleChange = useCallback<FormEventHandler<HTMLFormElement>>(event => {
+    const formElement = event.currentTarget;
+    const inputElement = event.target as HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement | null;
+    if (!formElement || !inputElement) return;
+
+    const formData = new FormData(formElement);
+    const currValues = Object.fromEntries(formData.entries());
+
+    const newFormValues = {
+      ...formValues,
+      ...currValues,
+      [inputElement.name]: inputElement.type === 'number' ? Number(inputElement.value) : inputElement.value
+    };
+
+    setFormValues(newFormValues);
+  }, [formValues]);
+
   const handleValidateLatinName = useCallback<NonNullable<DOMAttributes<HTMLButtonElement>['onClick']>>(
     async (ev) => {
       const form = ev.currentTarget.form;
@@ -90,7 +126,7 @@ const useCardMakerForm = ({
     [setClassification, setFanmadeCards, setOfficialCards, setWikiData]
   );
 
-  return { handleValidateLatinName };
+  return { formRef, formValues, handleChange, handleValidateLatinName, };
 };
 
 export default useCardMakerForm;

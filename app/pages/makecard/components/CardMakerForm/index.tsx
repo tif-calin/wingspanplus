@@ -1,7 +1,7 @@
 import { styled } from '@linaria/react';
 import Input from '~/components/forms/Input';
 import WingspanCard from '../WingspanCard';
-import { Fragment, memo, useState, type ComponentProps } from 'react';
+import { Fragment, memo, useState } from 'react';
 import Button from '~/components/forms/Button';
 import Taxonomy from '../CardMakerForm/Taxonomy';
 import { css } from '@linaria/core';
@@ -10,6 +10,7 @@ import type { FanmadeBirdRow, OfficialBirdRow } from '~/data/official-birds';
 import InfoSection from './InfoSection';
 import type getWikiData from '~/utils/http/getWikiData';
 import StyledExternalLink from '~/components/ExternalLink';
+import FormGridLayout from '~/components/forms/FormGridLayout';
 
 const buttonStyles = css`
   align-self: flex-end;
@@ -70,42 +71,40 @@ const ExternalLinksList = styled.ul`
   }
 `;
 
-const DEFAULT_VALUES: ComponentProps<typeof WingspanCard> = {
-  eggCapacity: 3,
-  flavor: 'Gadwalls are known for their ability to steal food from diving ducks.',
-  foodCost: '[fish] + [fish]',
-  habitats: ['wetland'],
-  nameCommon: 'Gadwall',
-  nameLatin: "Mareca strepera",
-  nestKind: "ground",
-  photo: { url: 'https://inaturalist-open-data.s3.amazonaws.com/photos/395500578/original.jpg', removeBg: true, scale: 1.2, translateX: 10, translateY: -5 },
-  power: { kind: 'ONCE BETWEEN TURNS', text: 'When another player takes the "gain food" action, choose a [wild] they gained from the birdfeeder and cache 1 on this bird from the supply.' },
-  victoryPoints: 5,
-  wingspan: 25
-};
-
 const CardMakerForm = () => {
   const [classification, setClassification] = useState<string[]>([]);
   const [officialCards, setOfficialCards] = useState<Record<string, OfficialBirdRow[]>>();
   const [fanmadeCards, setFanmadeCards] = useState<FanmadeBirdRow[]>();
   const [wikiData, setWikiData] = useState<Awaited<ReturnType<typeof getWikiData>>>();
 
-  const { handleValidateLatinName } = useCardMakerForm({
+  const {
+    formRef,
+    formValues,
+    handleChange,
+    handleValidateLatinName
+  } = useCardMakerForm({
     setClassification,
     setOfficialCards,
     setFanmadeCards,
-    setWikiData
+    setWikiData,
   });
+
+  const isValid = classification.length > 1;
 
   return (
     <Container>
       <Preview>
-        <WingspanCard {...DEFAULT_VALUES} />
+        <WingspanCard {...formValues} />
       </Preview>
-      <FormWrapper action={console.log}>
-        <Input inputType="text" fieldName="nameLatin" fieldTitle="Latin Name" />
+      <FormWrapper onChange={handleChange} action={console.log} ref={formRef}>
+        <Input
+          inputType="text"
+          fieldName="nameLatin"
+          fieldTitle="Latin Name"
+          defaultValue={formValues.nameLatin}
+          status={isValid ? "success" : undefined}
+        />
         <Button className={buttonStyles} type="button" onClick={handleValidateLatinName}>validate &rarr;</Button>
-        <hr />
         <Taxonomy classification={classification} />
         {!!wikiData?.identifiers.length && (
           <InfoSection title={`external links`}>
@@ -147,8 +146,39 @@ const CardMakerForm = () => {
             ))}
           </InfoSection>
         )}
-        <hr />
-        <Input inputType="text" fieldName="nameCommon" fieldTitle="Common Name" />
+        {isValid && (
+          <>
+            <br />
+            <FormGridLayout>
+              <Input inputType="text" fieldName="nameCommon" fieldTitle="Common Name" defaultValue={formValues.nameCommon} />
+              {/* TODO: Habitat checkbox select */}
+              <Input inputType="text" fieldName="foodCost" fieldTitle="Food Cost" defaultValue={formValues.foodCost} />
+              <Input
+                gridSpan={4}
+                inputType="number"
+                fieldName="victoryPoints"
+                fieldTitle="Victory Points"
+                defaultValue={formValues.victoryPoints}
+                min="0"
+                max="9"
+              />
+              {/* TODO: nest kind drop down */}
+              {/* <Select name="nestKind" /> */}
+              <Input
+                gridSpan={4}
+                inputType='number'
+                fieldName="eggCapacity"
+                fieldTitle="Egg Capacity"
+                defaultValue={formValues.eggCapacity}
+                min="1" // TODO: disable when nestKind is NONE
+                max="6"
+              />
+              <Input inputType='number' fieldName="wingspan" fieldTitle="Wingspan" defaultValue={formValues.wingspan} />
+              {/* TODO: power textarea */}
+              {/* TODO: flavor textarea */}
+            </FormGridLayout>
+          </>
+        )}
       </FormWrapper>
     </Container>
   );

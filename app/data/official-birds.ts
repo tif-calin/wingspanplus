@@ -12,7 +12,6 @@ export const OFFICIAL_BIRDS_DATA = await fetch('/assets/cards_official.csv')
   .then((csv) => {
     const { data } = Papa.parse<OfficialBirdRow>(csv, { header: true });
 
-    console.log(data);
     return data;
   })
 ;
@@ -32,7 +31,6 @@ export const FANMADE_BIRDS_DATA = await fetch('/assets/cards_fanmade.csv')
   .then((csv) => {
     const { data } = Papa.parse<FanmadeBirdRow>(csv, { header: true });
 
-    console.log('fan-made', data);
     return data;
   })
 ;

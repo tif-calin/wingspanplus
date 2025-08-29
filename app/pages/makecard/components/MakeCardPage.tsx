@@ -69,7 +69,7 @@ const EXAMPLES = [
     nameLatin: 'Buteo buteo', // https://navarog.github.io/wingsearch/card/78
     nestKind: 'platform',
     photo: {
-      removeBg: false,
+      removeBg: true,
       scale: 1.3,
       translateX: 10,
       translateY: -5,

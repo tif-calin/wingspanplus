@@ -1,16 +1,17 @@
 import { styled } from '@linaria/react';
-import type { HTMLInputTypeAttribute, InputHTMLAttributes } from 'react';
+import { useId, type HTMLInputTypeAttribute, type InputHTMLAttributes } from 'react';
 
-const InputStyled = styled.fieldset`
+const InputStyled = styled.div<{ gridSpan: number }>`
   background-color: #fff;
   border: 2px solid #455;
    border-radius: 0.15rem;
   display: flex;
    flex-grow: 1;
+  grid-column: span ${props => props.gridSpan};
   padding: 0;
   position: relative;
 
-  & > legend {
+  & > .label {
     border-radius: 0.15rem;
     pointer-events: none;
     position: absolute;
@@ -20,6 +21,7 @@ const InputStyled = styled.fieldset`
     z-index: 1;
   }
 
+  &.success > input:valid:not(:placeholder-shown) + .label { color: #3a5; }
   & > input {
     background: none;
     border: none;
@@ -29,8 +31,8 @@ const InputStyled = styled.fieldset`
     width: 4rem;
     z-index: 1;
 
-    &:focus + legend,
-    &:not(:placeholder-shown) + legend {
+    &:focus + .label,
+    &:not(:placeholder-shown) + .label {
       background: #fff;
       font-size: 0.8em;
       left: 0.25rem;
@@ -38,8 +40,8 @@ const InputStyled = styled.fieldset`
       top: -0.75rem;
       z-index: 0;
     }
-
-    &:valid:not(:placeholder-shown) + legend { color: #99a; }
+    &:valid:not(:placeholder-shown) + .label { color: #99a; }
+    &:invalid + .label { color: #c44; }
   }
 
   & > select {
@@ -58,24 +60,33 @@ type Props = {
   fieldName: string;
   /** If the displayed title should be something other than the fieldName */
   fieldTitle?: string;
+  /**
+   * How many columns (out of 12) the input should span.
+   * @default 12
+   */
+  gridSpan?: number;
   /** @default "text" */
   inputType: HTMLInputTypeAttribute;
-  // /** Success state turns label text green. */
-  // isValid?: boolean;
-};
+  /** Success state turns label text green. */
+  status?: 'disabled' | 'error' | 'success';
+} & InputHTMLAttributes<HTMLInputElement>;
 
 const Input = (props: Props) => {
   const {
-    defaultValue,
     inputType = 'text',
     fieldName,
     fieldTitle,
+    gridSpan = 12,
+    status,
+    ...inputProps
   } = props;
 
+  const id = useId();
+
   return (
-    <InputStyled>
-      <input name={fieldName} type={inputType} placeholder="&nbsp;" defaultValue={defaultValue} />
-      <legend>{fieldTitle || fieldName}</legend>
+    <InputStyled gridSpan={gridSpan} className={status}>
+      <input id={id} name={fieldName} type={inputType} placeholder="&nbsp;" {...inputProps} />
+      <label className="label" htmlFor={id}>{fieldTitle || fieldName}</label>
     </InputStyled>
   );
 };
