@@ -39,5 +39,8 @@
     - [ ] handle synonyms gracefully
   - [ ] DSM mode: no icons, different fonts, etc
   - [ ] gallery
+  - [~] card editor form
+    - [ ] inat public commons photo search
+    - [~] form editor
 - [ ] Make a `stats` page to break down stats across expansions
 - [ ] Annotate relevant media (documentaries, videos, podcasts, etc) that mention a given species

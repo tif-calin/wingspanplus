@@ -11,6 +11,7 @@ import InfoSection from './InfoSection';
 import type getWikiData from '~/utils/http/getWikiData';
 import StyledExternalLink from '~/components/ExternalLink';
 import FormGridLayout from '~/components/forms/FormGridLayout';
+import Select from '~/components/forms/Select';
 
 const buttonStyles = css`
   align-self: flex-end;
@@ -163,7 +164,14 @@ const CardMakerForm = () => {
                 max="9"
               />
               {/* TODO: nest kind drop down */}
-              {/* <Select name="nestKind" /> */}
+              <Select gridSpan={4} name="nestKind" fieldTitle="Nest Kind" options={[
+                { value: 'bowl', label: 'Bowl' },
+                { value: 'cavity', label: 'Cavity' },
+                { value: 'ground', label: 'Ground' },
+                { value: 'platform', label: 'Platform' },
+                { value: 'star', label: 'Star' },
+                { value: 'null', label: 'No Nest' },
+              ]} />
               <Input
                 gridSpan={4}
                 inputType='number'

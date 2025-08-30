@@ -87,16 +87,12 @@ const useCardMakerForm = ({
     const inputElement = event.target as HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement | null;
     if (!formElement || !inputElement) return;
 
-    const formData = new FormData(formElement);
-    const currValues = Object.fromEntries(formData.entries());
+    const editedKey = inputElement.name;
+    let editedVal: string | number | null = inputElement.value;
+    if (inputElement.type === 'number') editedVal = Number(inputElement.value);
+    if (editedVal === 'null') editedVal = null;
 
-    const newFormValues = {
-      ...formValues,
-      ...currValues,
-      [inputElement.name]: inputElement.type === 'number' ? Number(inputElement.value) : inputElement.value
-    };
-
-    setFormValues(newFormValues);
+    setFormValues({ ...formValues, [editedKey]: editedVal });
   }, [formValues]);
 
   const handleValidateLatinName = useCallback<NonNullable<DOMAttributes<HTMLButtonElement>['onClick']>>(

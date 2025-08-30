@@ -1,5 +1,6 @@
 import { styled } from '@linaria/react';
 import Icon from '../Icon';
+import type { NestEnum } from '../../types';
 
 const Wrapper = styled.div`
   display: flex;
@@ -7,6 +8,7 @@ const Wrapper = styled.div`
    flex-direction: column;
    gap: 0.5mm;
   margin-left: 3.75mm;
+  min-width: 5.25mm;
   padding-top: 8.5mm;
   position: absolute;
    left: 0;
@@ -50,7 +52,7 @@ const Wrapper = styled.div`
 
 type Props = {
   eggCapacity: number;
-  nestKind: 'bowl' | 'cavity' | 'ground' | 'platform' | 'star' | null;
+  nestKind: `${NestEnum}` | null;
   victoryPoints: number;
 };
 
