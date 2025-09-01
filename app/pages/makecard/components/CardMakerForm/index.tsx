@@ -99,11 +99,12 @@ const CardMakerForm = () => {
       </Preview>
       <FormWrapper onChange={handleChange} action={console.log} ref={formRef}>
         <Input
-          inputType="text"
-          fieldName="nameLatin"
-          fieldTitle="Latin Name"
           defaultValue={formValues.nameLatin}
+          kind="text"
+          label="Latin Name"
+          name="nameLatin"
           status={isValid ? "success" : undefined}
+          type="text"
         />
         <Button className={buttonStyles} type="button" onClick={handleValidateLatinName}>validate &rarr;</Button>
         <Taxonomy classification={classification} />
@@ -151,37 +152,63 @@ const CardMakerForm = () => {
           <>
             <br />
             <FormGridLayout>
-              <Input inputType="text" fieldName="nameCommon" fieldTitle="Common Name" defaultValue={formValues.nameCommon} />
-              {/* TODO: Habitat checkbox select */}
-              <Input inputType="text" fieldName="foodCost" fieldTitle="Food Cost" defaultValue={formValues.foodCost} />
               <Input
-                gridSpan={4}
-                inputType="number"
-                fieldName="victoryPoints"
-                fieldTitle="Victory Points"
+                defaultValue={formValues.nameCommon}
+                kind="text"
+                label="Common Name"
+                name="nameCommon"
+                type="text"
+              />
+              {/* TODO: Habitat checkbox select */}
+              <Input
+                defaultValue={formValues.foodCost}
+                kind="text"
+                label="Food Cost"
+                name="foodCost"
+                type="text"
+              />
+              <Input
                 defaultValue={formValues.victoryPoints}
-                min="0"
+                gridSpan={4}
+                kind="number"
+                type="number"
+                label="Victory Points"
                 max="9"
+                min="0"
+                name="victoryPoints"
               />
               {/* TODO: nest kind drop down */}
-              <Select gridSpan={4} name="nestKind" fieldTitle="Nest Kind" options={[
-                { value: 'bowl', label: 'Bowl' },
-                { value: 'cavity', label: 'Cavity' },
-                { value: 'ground', label: 'Ground' },
-                { value: 'platform', label: 'Platform' },
-                { value: 'star', label: 'Star' },
-                { value: 'null', label: 'No Nest' },
-              ]} />
+              <Select
+                defaultValue={`${formValues.nestKind}`}
+                gridSpan={4}
+                label="Nest Kind"
+                name="nestKind"
+                options={[
+                  { value: 'bowl', label: 'Bowl' },
+                  { value: 'cavity', label: 'Cavity' },
+                  { value: 'ground', label: 'Ground' },
+                  { value: 'platform', label: 'Platform' },
+                  { value: 'star', label: 'Star' },
+                  { value: 'null', label: 'No Nest' },
+                ]}
+              />
               <Input
                 gridSpan={4}
-                inputType='number'
-                fieldName="eggCapacity"
-                fieldTitle="Egg Capacity"
+                kind="number"
+                type="number"
+                name="eggCapacity"
+                label="Egg Capacity"
                 defaultValue={formValues.eggCapacity}
                 min="1" // TODO: disable when nestKind is NONE
                 max="6"
               />
-              <Input inputType='number' fieldName="wingspan" fieldTitle="Wingspan" defaultValue={formValues.wingspan} />
+              <Input
+                kind="number"
+                type="number"
+                name="wingspan"
+                label="Wingspan"
+                defaultValue={formValues.wingspan}
+              />
               {/* TODO: power textarea */}
               {/* TODO: flavor textarea */}
             </FormGridLayout>

@@ -37,7 +37,7 @@ const SelectWrapper = styled.div<{ gridSpan: number }>`
 
 type HtmlSelectProps = DetailedHTMLProps<SelectHTMLAttributes<HTMLSelectElement>, HTMLSelectElement>;
 type Props = {
-  fieldTitle: string;
+  label: string;
   /**
    * How many columns (out of 12) the input should span.
    * @default 12
@@ -48,7 +48,7 @@ type Props = {
 
 const Select = (props: Props) => {
   const {
-    fieldTitle,
+    label,
     gridSpan = 12,
     options,
     ...selectProps
@@ -63,7 +63,7 @@ const Select = (props: Props) => {
           </option>
         ))}
       </select>
-      <label className="label">{fieldTitle}</label>
+      <label className="label">{label}</label>
     </SelectWrapper>
   );
 };

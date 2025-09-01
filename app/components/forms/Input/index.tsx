@@ -1,9 +1,16 @@
 import { styled } from '@linaria/react';
-import { useId, type HTMLInputTypeAttribute, type InputHTMLAttributes } from 'react';
+import { memo, useId } from 'react';
+import type { HtmlInputAttributes } from './types';
 
 const InputStyled = styled.div<{ gridSpan: number }>`
-  background-color: #fff;
-  border: 2px solid #455;
+  --clr-bg: #fff;
+  --clr-border: #455;
+  --clr-label: #99a;
+  --clr-success: #3a5;
+  --clr-error: #c44;
+
+  background-color: var(--clr-bg);
+  border: 2px solid var(--clr-border);
    border-radius: 0.15rem;
   display: flex;
    flex-grow: 1;
@@ -21,7 +28,7 @@ const InputStyled = styled.div<{ gridSpan: number }>`
     z-index: 1;
   }
 
-  &.success > input:valid:not(:placeholder-shown) + .label { color: #3a5; }
+  &.success > input:valid:not(:placeholder-shown) + .label { color: var(--clr-success); }
   & > input {
     background: none;
     border: none;
@@ -33,49 +40,36 @@ const InputStyled = styled.div<{ gridSpan: number }>`
 
     &:focus + .label,
     &:not(:placeholder-shown) + .label {
-      background: #fff;
+      background: var(--clr-bg);
       font-size: 0.8em;
       left: 0.25rem;
       padding: 0 0.25rem;
       top: -0.75rem;
       z-index: 0;
     }
-    &:valid:not(:placeholder-shown) + .label { color: #99a; }
-    &:invalid + .label { color: #c44; }
-  }
-
-  & > select {
-    flex-grow: 0;
-    border: none;
-    outline: none;
-    border-left: 1px solid #455;
-    padding-left: 0.25rem;
-    background-color: #fcfcfc;
+    &:valid:not(:placeholder-shown) + .label { color: var(--clr-label); }
+    &:invalid + .label { color: var(--clr-error); }
   }
 `;
 
 type Props = {
-  defaultValue?: InputHTMLAttributes<HTMLInputElement>['value'];
-  /** Required. Should be unique within form. */
-  fieldName: string;
-  /** If the displayed title should be something other than the fieldName */
-  fieldTitle?: string;
+  /** Label for the input field */
+  label: string;
   /**
    * How many columns (out of 12) the input should span.
    * @default 12
    */
   gridSpan?: number;
-  /** @default "text" */
-  inputType: HTMLInputTypeAttribute;
+  /** Type of input UI */
+  kind: 'text' | 'number' | 'select' | 'textarea';
   /** Success state turns label text green. */
   status?: 'disabled' | 'error' | 'success';
-} & InputHTMLAttributes<HTMLInputElement>;
+} & HtmlInputAttributes<HTMLInputElement, 'name' | 'type'>;
 
 const Input = (props: Props) => {
   const {
-    inputType = 'text',
-    fieldName,
-    fieldTitle,
+    kind: _kind, // TODO
+    label,
     gridSpan = 12,
     status,
     ...inputProps
@@ -85,10 +79,12 @@ const Input = (props: Props) => {
 
   return (
     <InputStyled gridSpan={gridSpan} className={status}>
-      <input id={id} name={fieldName} type={inputType} placeholder="&nbsp;" {...inputProps} />
-      <label className="label" htmlFor={id}>{fieldTitle || fieldName}</label>
+      <input id={id} placeholder="&nbsp;" {...inputProps} />
+      <label className="label" htmlFor={id}>
+        {label || inputProps.placeholder || inputProps.name}
+      </label>
     </InputStyled>
   );
 };
 
-export default Input;
+export default memo(Input);
