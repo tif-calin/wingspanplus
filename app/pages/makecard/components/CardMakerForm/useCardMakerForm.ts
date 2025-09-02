@@ -1,9 +1,10 @@
 import { useCallback, useRef, useState, type ComponentProps, type Dispatch, type DOMAttributes, type FormEventHandler, type SetStateAction } from 'react';
 import { matchLatinName } from '../../utils/http/checklistbank';
-import { filterObject, objectFromEntries } from '~/utils/objects';
+import { deepMerge, filterObject, objectFromEntries } from '~/utils/objects';
 import type { FanmadeBirdRow, OfficialBirdRow } from '~/data/official-birds';
 import getWikiData from '~/utils/http/getWikiData';
 import type WingspanCard from '../WingspanCard';
+import type { DeepPartial } from '~/utils/utilityTypes';
 
 type UseCardMakerFormParams = {
   setClassification: Dispatch<SetStateAction<string[]>>;
@@ -21,7 +22,10 @@ const DEFAULT_VALUES: ComponentProps<typeof WingspanCard> = {
   nameLatin: "Mareca strepera",
   nestKind: "ground",
   // photo: { url: 'https://inaturalist-open-data.s3.amazonaws.com/photos/395500578/original.jpg', removeBg: true, scale: 1.2, translateX: 10, translateY: -5 },
-  photo: { url: 'https://inaturalist-open-data.s3.amazonaws.com/photos/96684139/original.jpg', removeBg: true, scale: 0.8, translateX: 10, translateY: 10 },
+  // photo: { url: 'https://inaturalist-open-data.s3.amazonaws.com/photos/96684139/original.jpg', removeBg: true, scale: 0.8, translateX: 10, translateY: 10 },
+  // photo: { url: 'https://inaturalist-open-data.s3.amazonaws.com/photos/13452704/original.jpg', removeBg: true, scale: 2.7, translateX: 9, translateY: 11 },
+  photo: { url: 'https://inaturalist-open-data.s3.amazonaws.com/photos/185113500/original.jpeg', removeBg: true, scale: 1.3, translateX: -9, translateY: 15 },
+  // photo: { url: 'https://inaturalist-open-data.s3.amazonaws.com/photos/465744479/original.jpeg', removeBg: true, scale: 0.8, translateX: 10, translateY: 10 },
   power: { kind: 'ONCE BETWEEN TURNS', text: 'When another player takes the "gain food" action, choose a [wild] they gained from the birdfeeder and cache 1 on this bird from the supply.' },
   victoryPoints: 5,
   wingspan: 90,
@@ -92,7 +96,9 @@ const useCardMakerForm = ({
     if (inputElement.type === 'number') editedVal = Number(inputElement.value);
     if (editedVal === 'null') editedVal = null;
 
-    setFormValues({ ...formValues, [editedKey]: editedVal });
+    const newFormValues = editedKey.split('.').reverse().reduce((acc, currKey) => ({ [currKey]: acc }), editedVal as DeepPartial<typeof formValues>);
+
+    setFormValues(deepMerge(formValues, newFormValues));
   }, [formValues]);
 
   const handleValidateLatinName = useCallback<NonNullable<DOMAttributes<HTMLButtonElement>['onClick']>>(

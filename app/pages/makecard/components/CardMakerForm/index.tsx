@@ -210,7 +210,27 @@ const CardMakerForm = () => {
                 defaultValue={formValues.wingspan}
               />
               {/* TODO: power textarea */}
+              <Select
+                defaultValue={`${formValues.power?.kind}`}
+                gridSpan={4}
+                label="Power Kind"
+                name="power.kind"
+                options={['WHEN ACTIVATED', 'ONCE BETWEEN TURNS', 'WHEN PLAYED', 'ROUND END', 'GAME END'].map(value => ({ label: value, value }))}
+              />
+              <Input
+                gridSpan={8}
+                kind="textarea"
+                name="power.text"
+                label="Power Text"
+                defaultValue={formValues.power?.text}
+              />
               {/* TODO: flavor textarea */}
+              <Input
+                kind="textarea"
+                name="flavor"
+                label="Flavor Text"
+                defaultValue={formValues.flavor}
+              />
             </FormGridLayout>
           </>
         )}

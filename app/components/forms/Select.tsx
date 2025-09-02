@@ -9,6 +9,7 @@ const SelectWrapper = styled.div<{ gridSpan: number }>`
   display: flex;
    flex-grow: 1;
   grid-column: span ${props => props.gridSpan};
+  height: 2rem;
   padding: 0;
   position: relative;
 
@@ -18,6 +19,7 @@ const SelectWrapper = styled.div<{ gridSpan: number }>`
     flex-grow: 1;
     outline: none;
     padding: 0.25rem 0.5rem;
+    width: 100%;
   }
 
   & > .label {

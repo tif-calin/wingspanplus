@@ -174,7 +174,7 @@ const WingspanCard = React.memo(({
         </div>
       </MiddleRow>
       <BottomRow>
-        {power && <Power {...power} />}
+        {power?.text && <Power {...power} />}
         {flavor &&<div className="flavor">{flavor}</div>}
       </BottomRow>
     </Wrapper>

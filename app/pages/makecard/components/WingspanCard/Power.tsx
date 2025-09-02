@@ -10,8 +10,7 @@ const PowerWrapper = styled.div`
    border-image: url("/assets/brown.png");
    border-image-slice: 10;
    border-image-width: 0.5; */
-  background: url("/assets/brown.png");
-   background-size: 100% 100%;
+  background-size: 100% 100%;
   padding: 2.5mm;
   display: -webkit-box;
    align-items: center;
@@ -39,7 +38,7 @@ const POWER_COLOR_LOOKUP: Record<Props['kind'], string | null> = {
 };
 
 type Props = {
-  kind: 'WHEN ACTIVATED' | 'ONCE BETWEEN TURNS' | 'WHEN PLAYED' | 'ROUND END' | 'GAME END';
+  kind: 'WHEN ACTIVATED' | 'ONCE BETWEEN TURNS' | 'WHEN PLAYED' | 'ROUND END' | 'GAME END'; // TODO: handle none
   text: string;
 };
 
