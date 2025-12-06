@@ -49,8 +49,10 @@ export const ErrorBoundary = ({ error }: Route.ErrorBoundaryProps) => {
   );
 }
 
-const App = () => {
+export function HydrateFallback() {
+  return <span>Loading...</span>;
+}
+
+export default function App() {
   return <Outlet />;
 };
-
-export default App;

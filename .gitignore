@@ -12,6 +12,7 @@
 /build
 dist
 dist-ssr
+/.react-router/
 tsconfig.tsbuildinfo
 
 # env
@@ -46,3 +47,6 @@ lerna-debug.log*
 # temp files
 assets/temp/*
 !.keep
+
+# Local Netlify folder
+.netlify
