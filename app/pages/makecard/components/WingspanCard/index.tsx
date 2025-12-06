@@ -6,6 +6,7 @@ import LeftSideBarInfo from './LeftSideBarInfo';
 import BirdImage from './BirdImage';
 import Icon from '../Icon';
 import Power from './Power';
+import useLocalStorage from '../../hooks/useLocalStorage';
 
 const Wrapper = styled.div`
   /* https://onlinejpgtools.com/find-dominant-jpg-colors */
@@ -119,6 +120,7 @@ const BottomRow = styled.div`
 `;
 
 type Props = {
+  id?: string;
   flavor?: string;
   nameCommon: string;
   nameLatin: string;
@@ -129,6 +131,7 @@ type Props = {
 } & ComponentProps<typeof LeftSideBarInfo> & ComponentProps<typeof HabitatInfo>;
 
 const WingspanCard = React.memo(({
+  id,
   eggCapacity,
   flavor,
   foodCost,
@@ -143,15 +146,21 @@ const WingspanCard = React.memo(({
 }: Props) => {
   // TODO: move all this to BirdImge component
   const [imageSrc, setImageSrc] = React.useState('');
+  const [imageNoBgSrc, setImageNoBgSrc] = useLocalStorage(photo?.url || '', '');
   React.useEffect(() => {
     if (!photo?.url) return;
     if (imageSrc) return;
-    if (photo?.removeBg) removeBackgroundFromUrl(photo?.url).then(setImageSrc);
+    if (photo?.removeBg) {
+      if (imageNoBgSrc) return;
+      removeBackgroundFromUrl(photo?.url).then(data => {
+        if (data?.length > 100) setImageNoBgSrc(data);
+      });
+    }
     else setImageSrc(photo?.url);
-  }, [imageSrc, photo?.removeBg, photo?.url]);
+  }, [imageNoBgSrc, imageSrc, photo?.removeBg, photo?.url, setImageNoBgSrc]);
 
   return (
-    <Wrapper>
+    <Wrapper id={id}>
       <UpperRow>
         <HabitatInfo foodCost={foodCost} habitats={habitats} />
         <CardName>
@@ -162,7 +171,7 @@ const WingspanCard = React.memo(({
       <MiddleRow>
         <LeftSideBarInfo eggCapacity={eggCapacity} nestKind={nestKind} victoryPoints={victoryPoints} />
         <BirdImage
-          imageSrc={imageSrc}
+          imageSrc={imageNoBgSrc || imageSrc}
           altText={`bird photo of ${nameCommon}`}
           scale={photo?.scale}
           translateX={photo?.translateX}

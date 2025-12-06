@@ -1,7 +1,7 @@
 import { styled } from '@linaria/react';
 import Input from '~/components/forms/Input';
 import WingspanCard from '../WingspanCard';
-import { Fragment, memo, useState } from 'react';
+import { Fragment, memo, useId, useState } from 'react';
 import Button from '~/components/forms/Button';
 import Taxonomy from '../CardMakerForm/Taxonomy';
 import { css } from '@linaria/core';
@@ -12,6 +12,7 @@ import type getWikiData from '~/utils/http/getWikiData';
 import StyledExternalLink from '~/components/ExternalLink';
 import FormGridLayout from '~/components/forms/FormGridLayout';
 import Select from '~/components/forms/Select';
+import DownloadButton from '../DownloadButton';
 
 const buttonStyles = css`
   align-self: flex-end;
@@ -33,7 +34,11 @@ const Container = styled.div`
   width: 100%;
 `;
 
-const Preview = styled.output``;
+const Preview = styled.output`
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+`;
 
 const FormWrapper = styled.form`
   --black: #273f3f;
@@ -92,10 +97,13 @@ const CardMakerForm = () => {
 
   const isValid = classification.length > 1;
 
+  const id = useId();
+
   return (
     <Container>
       <Preview>
-        <WingspanCard {...formValues} />
+        <WingspanCard id={id} {...formValues} />
+        <DownloadButton elementId={id} fileName={formValues.nameCommon} />
       </Preview>
       <FormWrapper onChange={handleChange} action={console.log} ref={formRef}>
         <Input

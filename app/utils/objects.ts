@@ -1,6 +1,27 @@
 import type { Json } from './utilityTypes';
 
 /**
+ * Returns hash with property values for keys, grouped items as values
+ */
+export const groupItemsByFunction = <
+  NewKey extends string,
+  ObjType extends Record<string, unknown>
+>(
+  items: ObjType[],
+  keyGetter: (obj: ObjType, i: number) => NewKey
+): Record<NewKey, ObjType[]> =>
+  items.reduce((acc, item, i) => {
+    const typename = keyGetter(item, i);
+
+    acc[typename] ||= [];
+    acc[typename].push(item);
+
+    return acc;
+  }, {} as Record<string, ObjType[]>)
+;
+
+
+/**
  * A type-preserving version of Object.entries().
  */
 export const objectEntries = <T extends object>(object: T) => Object.entries(object) as [keyof T, T[keyof T]][];
