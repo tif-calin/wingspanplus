@@ -7,7 +7,7 @@ export type OfficialBirdRow = {
   wingsearchLink: string;
 };
 
-export const OFFICIAL_BIRDS_DATA = await fetch('/assets/cards_official.csv')
+export const OFFICIAL_BIRDS_DATA = await fetch('/assets/cards-official.csv')
   .then((response) => response.text())
   .then((csv) => {
     const { data } = Papa.parse<OfficialBirdRow>(csv, { header: true });
@@ -26,7 +26,7 @@ export type FanmadeBirdRow = {
   'meta:lang': string;
 };
 
-export const FANMADE_BIRDS_DATA = await fetch('/assets/cards_fanmade.csv')
+export const FANMADE_BIRDS_DATA = await fetch('/assets/cards-fanmade.csv')
   .then((response) => response.text())
   .then((csv) => {
     const { data } = Papa.parse<FanmadeBirdRow>(csv, { header: true });
