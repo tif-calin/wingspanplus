@@ -1,3 +1,4 @@
+import type { MethodKeys } from '../utilityTypes';
 import { CACHE } from './cache';
 
 const PROXY_URLS = [
@@ -26,7 +27,7 @@ type OptsHttpRequest = {
    */
   isLoud?: boolean;
   /** @default 'text' */
-  readAs?: 'text' | 'json';
+  readAs?: Extract<MethodKeys<Body>,  'json' | 'text'>;
   /** @default false */
   withProxy?: boolean;
 };
@@ -47,23 +48,23 @@ const httpRequest = async (
 ) => {
   const {
     crawlDelay = 69,
-    // isLoud = true,
+    isLoud = !!import.meta.env.DEV,
     readAs = 'text',
     withProxy = false,
   } = opts;
 
   const requestId = `${method}::||${url}`;
 
-  console.group(`httpRequest: ${requestId}`);
+  if (isLoud) console.group(`httpRequest: ${requestId}`);
 
   if (CACHE[requestId]) {
-    console.info('Cache hit!');
+    if (isLoud) console.info('Cache hit!');
   } else {
     const urlWithProxy = `${withProxy ? PROXY_URLS[0] : ''}${url}`; // TODO: make dynamic
-    console.info('Cache miss. Fetching', urlWithProxy);
+    if (isLoud) console.info('Cache miss. Fetching', urlWithProxy);
     const response = await fetch(urlWithProxy);
     const status = response.status;
-    console.info('Status:', status);
+    if (isLoud) console.info('Status:', status);
     const data = await (readAs === 'json' ? response.json() : response.text());
     if (status <= 299) CACHE[requestId] = JSON.stringify(data);
 
@@ -71,7 +72,7 @@ const httpRequest = async (
     await new Promise(resolve => setTimeout(resolve, crawlDelay));
   }
 
-  console.groupEnd();
+  if (isLoud) console.groupEnd();
   return JSON.parse(CACHE[requestId]);
 };
 
