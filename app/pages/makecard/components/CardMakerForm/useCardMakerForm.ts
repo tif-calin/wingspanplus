@@ -35,7 +35,7 @@ const useCardMakerForm = ({
     const editedKey = inputElement.name;
     let editedVal: string | number | boolean | null = inputElement.value;
     if (inputElement.type === 'number') editedVal = Number(inputElement.value);
-    if ('checked' in inputElement) editedVal = inputElement.checked;
+    if ('checked' in inputElement && inputElement.type === 'checkbox') editedVal = inputElement.checked;
     if (editedVal === 'null') editedVal = null;
 
     const newFormValues = editedKey.split('.').reverse().reduce((acc, currKey) => ({ [currKey]: acc }), editedVal as DeepPartial<typeof formValues>);
