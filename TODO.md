@@ -3,6 +3,7 @@
 - [ ] fan-made disclaimer
 - [x] habitat toggles
 - [ ] indexeddb for caching images with ttl
+- [ ] gallery management
 
 ## Big TODOs
 - [~] Card previewer

@@ -51,6 +51,7 @@ const TextWithInlineIcons = ({ text }: Props) => {
     return text.split(SPECIAL_REGEX).map((part, index) => {
 
       // TODO: replace 'as any' with type guard
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       return (index % 2) ? <Icon altText={part} icon={part as any} /> : part;
     })
   }, [text])

@@ -5,6 +5,9 @@ import type { FanmadeBirdRow, OfficialBirdRow } from '~/data/official-birds';
 import getWikiData from '~/utils/http/getWikiData';
 import type WingspanCard from '../WingspanCard';
 import type { DeepPartial } from '~/utils/utilityTypes';
+import { DEFAULT_CARDS } from './default-cards';
+import type WingspanCard from '../WingspanCard';
+import { constructRecommendedValues, constructTaxonomy, findFanmadeCards, findOfficialCards } from '../../hooks/useCardMakerForm/utils';
 
 type UseCardMakerFormParams = {
   setClassification: Dispatch<SetStateAction<string[]>>;
@@ -13,69 +16,7 @@ type UseCardMakerFormParams = {
   setWikiData: Dispatch<SetStateAction<Awaited<ReturnType<typeof getWikiData>> | undefined>>;
 };
 
-const DEFAULT_VALUES: ComponentProps<typeof WingspanCard> = {
-  eggCapacity: 3,
-  flavor: 'Gadwalls are known for their ability to steal food from diving ducks.',
-  foodCost: '[fish] + [fish]',
-  habitats: ['wetland'],
-  nameCommon: 'Gadwall',
-  nameLatin: "Mareca strepera",
-  nestKind: "ground",
-  // photo: { url: 'https://inaturalist-open-data.s3.amazonaws.com/photos/395500578/original.jpg', removeBg: true, scale: 1.2, translateX: 10, translateY: -5 },
-  // photo: { url: 'https://inaturalist-open-data.s3.amazonaws.com/photos/96684139/original.jpg', removeBg: true, scale: 0.8, translateX: 10, translateY: 10 },
-  // photo: { url: 'https://inaturalist-open-data.s3.amazonaws.com/photos/13452704/original.jpg', removeBg: true, scale: 2.7, translateX: 9, translateY: 11 },
-  photo: { url: 'https://inaturalist-open-data.s3.amazonaws.com/photos/185113500/original.jpeg', removeBg: true, scale: 1.3, translateX: -9, translateY: 15 },
-  // photo: { url: 'https://inaturalist-open-data.s3.amazonaws.com/photos/465744479/original.jpeg', removeBg: true, scale: 0.8, translateX: 10, translateY: 10 },
-  power: { kind: 'ONCE BETWEEN TURNS', text: 'When another player takes the "gain food" action, choose a [wild] they gained from the birdfeeder and cache 1 on this bird from the supply.' },
-  victoryPoints: 5,
-  wingspan: 90,
-};
-
-const findTaxonomy = async (latinName: string) => {
-  const data = await matchLatinName(latinName);
-  if (!data.match) throw new Error('Taxonomy not found');
-
-  const { name, classification } = data.usage;
-  const classRankIndex = classification.findIndex((c) => c.rank === 'class');
-  const newClassification = classification.slice(0, classRankIndex + 1).reverse();
-  const ranks = newClassification.map(c => [c.rank, c.name] as const);
-
-  return {
-    ...objectFromEntries(ranks),
-    species: name,
-   };
-};
-
-const findOfficialCards = async (speciesName: string, genusName: string, familyName: string, orderName: string) => {
-  const { OFFICIAL_BIRDS_DATA } = await import('~/data/official-birds');
-
-  const species = OFFICIAL_BIRDS_DATA.filter(bird => bird.acceptedName === speciesName);
-  let alreadyAdded = new Set<string>(species.map(bird => bird.acceptedName));
-  const genus = OFFICIAL_BIRDS_DATA.filter(bird => bird.acceptedName.split(' ').at(0) === genusName && !alreadyAdded.has(bird.acceptedName));
-  alreadyAdded = new Set([...alreadyAdded, ...genus.map(bird => bird.acceptedName)]);
-  const family = OFFICIAL_BIRDS_DATA.filter(bird => bird.family === familyName && !alreadyAdded.has(bird.acceptedName));
-  alreadyAdded = new Set([...alreadyAdded, ...family.map(bird => bird.acceptedName)]);
-  const order = OFFICIAL_BIRDS_DATA.filter(bird => bird.order === orderName && !alreadyAdded.has(bird.acceptedName));
-
-  return filterObject({
-    species,
-    genus,
-    family,
-    order,
-  }, (_, value) => value?.length > 0);
-};
-
-const findFanmadeCards = async (latinName: string, commonName: string) => {
-  const { FANMADE_BIRDS_DATA } = await import('~/data/official-birds');
-
-  const firstPass = FANMADE_BIRDS_DATA.filter(bird => bird.latin === latinName || bird.common === commonName);
-
-  // Handle potential synonyms by doing a second pass.
-  const commonNames = new Set([commonName, ...firstPass.map(bird => bird.common)]);
-  const latinNames = new Set([latinName, ...firstPass.map(bird => bird.latin)]);
-
-  return FANMADE_BIRDS_DATA.filter(bird => latinNames.has(bird.latin) || commonNames.has(bird.common));
-};
+const defaultOfTheDay = DEFAULT_CARDS[(new Date().getDate()) % DEFAULT_CARDS.length];
 
 const useCardMakerForm = ({
   setClassification,
