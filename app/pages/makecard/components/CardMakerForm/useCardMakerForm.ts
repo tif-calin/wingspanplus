@@ -92,14 +92,15 @@ const useCardMakerForm = ({
     if (!formElement || !inputElement) return;
 
     const editedKey = inputElement.name;
-    let editedVal: string | number | null = inputElement.value;
+    let editedVal: string | number | boolean | null = inputElement.value;
     if (inputElement.type === 'number') editedVal = Number(inputElement.value);
+    if ('checked' in inputElement) editedVal = inputElement.checked;
     if (editedVal === 'null') editedVal = null;
 
     const newFormValues = editedKey.split('.').reverse().reduce((acc, currKey) => ({ [currKey]: acc }), editedVal as DeepPartial<typeof formValues>);
 
-    setFormValues(deepMerge(formValues, newFormValues));
-  }, [formValues]);
+    setFormValues(deepMerge(formValues, deepMerge(recommendedValues, newFormValues)));
+  }, [formValues, recommendedValues]);
 
   const handleValidateLatinName = useCallback<NonNullable<DOMAttributes<HTMLButtonElement>['onClick']>>(
     async (ev) => {
@@ -110,7 +111,7 @@ const useCardMakerForm = ({
       const latinName = formData.get('nameLatin');
       if (typeof latinName !== 'string') throw new Error('Invalid Latin name');
 
-      const taxonomy = await findTaxonomy(latinName);
+      const taxonomy = await constructTaxonomy(latinName);
       if (!taxonomy) throw new Error('Taxonomy not found');
 
       const speciesName = `${taxonomy.species[0]}. ${taxonomy.species.split(/\s/).at(-1) || ''}`;
@@ -124,6 +125,11 @@ const useCardMakerForm = ({
 
       const wikidata = await getWikiData(latinName);
       setWikiData(wikidata);
+
+      const recommendedValues = await constructRecommendedValues({
+        avibaseId: wikidata.identifiers.find(id => id.propertyId === 'P2026')?.id || '',
+      });
+      setRecommendedValues(recommendedValues);
     },
     [setClassification, setFanmadeCards, setOfficialCards, setWikiData]
   );

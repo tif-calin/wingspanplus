@@ -12,7 +12,7 @@ const Wrapper = styled.picture`
 
 const Icon = ({ altText, icon }: Props) => {
   return (
-    <Wrapper>
+    <Wrapper className=''>
       <img
         alt={altText}
         src={`/assets/${icon}.png`}

@@ -135,7 +135,9 @@ const WingspanCard = React.memo(({
   eggCapacity,
   flavor,
   foodCost,
-  habitats,
+  forest,
+  grassland,
+  wetland,
   nameCommon,
   nameLatin,
   nestKind,
@@ -162,7 +164,7 @@ const WingspanCard = React.memo(({
   return (
     <Wrapper id={id}>
       <UpperRow>
-        <HabitatInfo foodCost={foodCost} habitats={habitats} />
+        <HabitatInfo foodCost={foodCost} forest={forest} grassland={grassland} wetland={wetland} />
         <CardName>
           <span className="title">{nameCommon}</span>
           <span className="latin">{nameLatin}</span>

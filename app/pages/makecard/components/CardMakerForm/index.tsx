@@ -1,7 +1,7 @@
 import { styled } from '@linaria/react';
 import Input from '~/components/forms/Input';
 import WingspanCard from '../WingspanCard';
-import { Fragment, memo, useId, useState } from 'react';
+import { Fragment, memo, useId, useMemo, useState } from 'react';
 import Button from '~/components/forms/Button';
 import Taxonomy from '../CardMakerForm/Taxonomy';
 import { css } from '@linaria/core';
@@ -13,6 +13,7 @@ import StyledExternalLink from '~/components/ExternalLink';
 import FormGridLayout from '~/components/forms/FormGridLayout';
 import Select from '~/components/forms/Select';
 import DownloadButton from '../DownloadButton';
+import SwitchDock from '~/components/forms/SwitchDock';
 
 const buttonStyles = css`
   align-self: flex-end;
@@ -77,6 +78,12 @@ const ExternalLinksList = styled.ul`
   }
 `;
 
+const HABITAT_OPTIONS = [
+  { value: 'forest', label: 'Forest' },
+  { value: 'grassland', label: 'Grassland' },
+  { value: 'wetland', label: 'Wetland' },
+] as const;
+
 const CardMakerForm = () => {
   const [classification, setClassification] = useState<string[]>([]);
   const [officialCards, setOfficialCards] = useState<Record<string, OfficialBirdRow[]>>();
@@ -94,6 +101,11 @@ const CardMakerForm = () => {
     setFanmadeCards,
     setWikiData,
   });
+
+  const habitatOptions = useMemo(() => HABITAT_OPTIONS.map(opt => ({
+    ...opt,
+    defaultChecked: formValues[opt.value],
+  })), [formValues]);
 
   const isValid = classification.length > 1;
 
@@ -168,8 +180,10 @@ const CardMakerForm = () => {
                 type="text"
               />
               {/* TODO: Habitat checkbox select */}
+              <SwitchDock label="Habitat" options={habitatOptions} gridSpan={6} />
               <Input
                 defaultValue={formValues.foodCost}
+                gridSpan={6}
                 kind="text"
                 label="Food Cost"
                 name="foodCost"
@@ -185,7 +199,6 @@ const CardMakerForm = () => {
                 min="0"
                 name="victoryPoints"
               />
-              {/* TODO: nest kind drop down */}
               <Select
                 defaultValue={`${formValues.nestKind}`}
                 gridSpan={4}
@@ -217,7 +230,6 @@ const CardMakerForm = () => {
                 label="Wingspan"
                 defaultValue={formValues.wingspan}
               />
-              {/* TODO: power textarea */}
               <Select
                 defaultValue={`${formValues.power?.kind}`}
                 gridSpan={4}
@@ -232,7 +244,6 @@ const CardMakerForm = () => {
                 label="Power Text"
                 defaultValue={formValues.power?.text}
               />
-              {/* TODO: flavor textarea */}
               <Input
                 kind="textarea"
                 name="flavor"

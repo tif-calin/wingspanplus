@@ -1,4 +1,9 @@
 
+## For initial release v0.1
+- [ ] fan-made disclaimer
+- [x] habitat toggles
+- [ ] indexeddb for caching images with ttl
+
 ## Big TODOs
 - [~] Card previewer
   - [x] top row
@@ -28,8 +33,7 @@
 - [~] Card editor
   - [ ] export
     - [ ] Save/load files
-    - [ ] Export to printable format
-    - [ ] "Don't Sue Me" mode
+    - [~] Export to printable format
   - [x] link to relevant sites: Avibase, CoL, EoL, GBIF, iNaturalist, OToL, WikiData, xeno-canto
   - [~] query for relevant cards
     - [ ] use Google Sheets API to get latest data
@@ -37,10 +41,11 @@
     - [x] query for official cards by taxonomy
   - [x] query checklistbank to check accepted species name
     - [ ] handle synonyms gracefully
-  - [ ] DSM mode: no icons, different fonts, etc
+  - [ ] DSM mode: no icons, different fonts, disclaimer, etc
   - [ ] gallery
   - [~] card editor form
     - [ ] inat public commons photo search
-    - [~] form editor
+    - [x] form editor
 - [ ] Make a `stats` page to break down stats across expansions
 - [ ] Annotate relevant media (documentaries, videos, podcasts, etc) that mention a given species
+- [ ] investigate `KnicKnic/WASM-ImageMagick`

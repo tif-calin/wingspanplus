@@ -1,6 +1,7 @@
 import { styled } from '@linaria/react';
 import type { FoodEnum, HabitatEnum } from '../../types';
 import TextWithInlineIcons from './TextWithInlineIcons';
+import { objectKeys } from '~/utils/objects';
 
 const Container = styled.div`
   background-color: #c7c1b3;
@@ -50,14 +51,15 @@ type FoodString = `${FoodCost}${`${FoodStringSplit}${FoodCost}` | ''}`
 
 type Props = {
   foodCost: FoodString;
-  habitats: HabitatEnum[];
-};
+} & { [K in HabitatEnum]: boolean };
 
-const HabitatInfo = ({ foodCost, habitats }: Props) => {
+const HabitatInfo = ({ foodCost, ...habitats }: Props) => {
+  const habitatsEnabled = objectKeys(habitats).filter(habitat => habitats[habitat]);
+
   return (
     <Container>
       <div>
-        {habitats.map(habitat => (
+        {habitatsEnabled.map(habitat => (
           <HabitatIcon key={habitat}>
             <img
               alt={`${habitat} habitat`}

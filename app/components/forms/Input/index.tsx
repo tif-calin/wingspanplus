@@ -25,6 +25,7 @@ const InputStyled = styled.div<{ gridSpan: number }>`
      top: 0.125rem;
      left: 0.5rem;
     transition: all 0.15s ease-in-out;
+    white-space: nowrap;
     z-index: 1;
   }
 

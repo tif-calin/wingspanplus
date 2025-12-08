@@ -8,7 +8,14 @@ const buttonStyles = css`
   align-self: center;
   font-weight: 700;
   padding: 0 0.5rem;
+  transition: background-color 0.15s ease;
+   transition-property: color, background-color;
   width: fit-content;
+
+  &:hover {
+    background-color: var(--clr-border);
+    color: var(--clr-bg);
+  }
 `;
 
 type Props = {

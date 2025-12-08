@@ -20,6 +20,12 @@ export const groupItemsByFunction = <
   }, {} as Record<string, ObjType[]>)
 ;
 
+/**
+ * Same as Object.keys() but preserves type information.
+ */
+export const objectKeys = <T extends Record<string, unknown>>(
+  obj: T
+): (keyof T)[] => Object.keys(obj) as (keyof T)[];
 
 /**
  * A type-preserving version of Object.entries().
