@@ -1,9 +1,11 @@
 
 ## For initial release v0.1
-- [ ] fan-made disclaimer
+- [x] fan-made disclaimer
 - [x] habitat toggles
 - [ ] indexeddb for caching images with ttl
 - [ ] gallery management
+- [ ] add image credits
+- [ ] some placeholder image until image selection is implemented
 
 ## Big TODOs
 - [~] Card previewer

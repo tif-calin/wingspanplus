@@ -3,7 +3,7 @@ import type { FoodEnum, HabitatEnum, InlineTextEnum, NestEnum, PowerTagEnum, UiE
 
 type Props = {
   altText: string;
-  icon: FoodEnum | PowerTagEnum | NestEnum | HabitatEnum | InlineTextEnum | UiEnum;
+  icon: FoodEnum | PowerTagEnum | NestEnum | HabitatEnum | InlineTextEnum | UiEnum | 'fan-made';
 };
 
 const Wrapper = styled.picture`

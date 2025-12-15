@@ -5,6 +5,7 @@ const config: Config = {
     console.log(`Preloading ${key}: ${curr} of ${total}`);
   }
 };
+
 preload(config).then(() => {
   console.log("Asset preloading succeeded");
 });
@@ -15,7 +16,7 @@ function blobToBase64(blob: Blob) {
     reader.onloadend = () => resolve(reader.result as string);
     reader.readAsDataURL(blob);
   });
-}
+};
 
 const cache: Record<string, string> = {};
 const removeBackgroundFromUrl = async (url: string | Blob) => {

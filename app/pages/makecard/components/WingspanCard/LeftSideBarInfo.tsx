@@ -48,6 +48,13 @@ const Wrapper = styled.div`
 
     & > * { display: inline; width: 1.7mm; }
   }
+
+  & .fan-made-disclaimer {
+    position: absolute;
+     bottom: 0;
+     left: 0;
+    height: 5.25mm;
+  }
 `;
 
 type Props = {
@@ -70,12 +77,15 @@ const LeftSideBarInfo = ({ eggCapacity, nestKind, victoryPoints }: Props) => {
             <Icon altText="nest" icon={nestKind} />
           </div>
           <div className="eggs">
-            {Array.from({ length: eggCapacity }, (_, i) => (
+            {Array.from({ length: Math.min(100, eggCapacity) }, (_, i) => (
               <Icon key={i} altText="egg" icon="smallegg" />
             ))}
           </div>
         </>
       )}
+      <div className="fan-made-disclaimer">
+        <Icon icon="fan-made" altText="fan-made icon" />
+      </div>
     </Wrapper>
   );
 };

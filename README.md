@@ -1,4 +1,5 @@
-# wingspanplusplus
+# wingfans
+
 This repository will serve as a hub for all my wingspan helper ideas. Not sure how likely I am to get through most of these ideas, but here's a list of some of them:
  - `makecard` - I'm really inspired by some of the fan-made expansions I saw and wanted to make a helper for that. It'd get data for different bird species and suggest certain attibutes automatically and also show similar existing cards as well as relevant stats (e.g. how many other bird cards exist with certain attributes).
  - `gameplot` - Keep track of certain stats during the game and at the end it can show you some pretty graphs of how the game went. Inspired by the amazing charts at the end of most Civ games that I spent a long time staring at after finishing a game.

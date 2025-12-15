@@ -179,7 +179,6 @@ const CardMakerForm = () => {
                 name="nameCommon"
                 type="text"
               />
-              {/* TODO: Habitat checkbox select */}
               <SwitchDock label="Habitat" options={habitatOptions} gridSpan={6} />
               <Input
                 defaultValue={formValues.foodCost}
