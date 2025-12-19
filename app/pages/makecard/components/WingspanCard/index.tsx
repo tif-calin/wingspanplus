@@ -111,11 +111,20 @@ const BottomRow = styled.div`
   & .flavor {
     flex-grow: 1;
     display: flex;
+     align-items: center;
+     gap: 1mm;
     font-style: italic;
     font-size: 2mm;
     line-height: 1;
     min-height: 8mm;
-    padding: 1mm 2.5mm;
+    padding: 0 2.5mm;
+
+    & > .map {
+      --size: 8mm;
+
+      flex: 0 1 var(--size);
+      min-width: var(--size);
+    }
   }
 `;
 
@@ -185,8 +194,13 @@ const WingspanCard = React.memo(({
         </div>
       </MiddleRow>
       <BottomRow>
-        {power?.text && <Power {...power} />}
-        {flavor &&<div className="flavor">{flavor}</div>}
+        {power?.kind && <Power {...power} />}
+        {flavor && (
+          <div className="flavor">
+            <Icon className="map" icon={`range-maps/${nameLatin}`} altText="range map" fallback={null} />
+            <p>{flavor}</p>
+          </div>)
+        }
       </BottomRow>
     </Wrapper>
   )

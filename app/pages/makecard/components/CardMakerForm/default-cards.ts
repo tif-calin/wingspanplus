@@ -18,12 +18,22 @@ export const DEFAULT_CARDS: Array<ComponentProps<typeof WingspanCard>> = [
     victoryPoints: 6,
     wingspan: 11
   },
-  // // Black Kite
-  // {
-  //   nameCommon: 'Black Kite',
-  //   nameLatin: 'Milvus migrans',
-  //   nestKind: 'platform',
-  // },
+  // Black Kite
+  {
+    eggCapacity: 2,
+    flavor: 'They are known to carry burning sticks in order to spread wildfires and capture fleeing prey.',
+    foodCost: '[rodent]',
+    forest: true,
+    grassland: true,
+    wetland: true,
+    nameCommon: 'Black Kite',
+    nameLatin: 'Milvus migrans',
+    nestKind: 'platform',
+    photo: { url: 'https://inaturalist-open-data.s3.amazonaws.com/photos/252849067/original.jpeg', removeBg: true, scale: 0.95, translateX: 5, translateY: -15, },
+    power: { kind: 'WHEN ACTIVATED', text: 'Tuck 1 face-up [card] from the tray with a wingspan <60cm under this bird.' },
+    victoryPoints: 3,
+    wingspan: 134,
+  },
   // Gadwall
   {
     eggCapacity: 3,
