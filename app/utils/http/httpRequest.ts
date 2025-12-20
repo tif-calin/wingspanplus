@@ -1,5 +1,5 @@
 import type { MethodKeys } from '../utilityTypes';
-import { CACHE } from './cache';
+import { CACHE, saveCache } from './cache';
 
 const PROXY_URLS = [
   'https://corsproxy.io/',
@@ -66,7 +66,10 @@ const httpRequest = async (
     const status = response.status;
     if (isLoud) console.info('Status:', status);
     const data = await (readAs === 'json' ? response.json() : response.text());
-    if (status <= 299) CACHE[requestId] = JSON.stringify(data);
+    if (status <= 299) {
+      CACHE[requestId] = JSON.stringify(data);
+      saveCache();
+    }
 
     // sleep to avoid rate limiting
     await new Promise(resolve => setTimeout(resolve, crawlDelay));
