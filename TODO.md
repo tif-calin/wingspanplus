@@ -13,28 +13,29 @@
     - [x] name
     - [x] habitat
     - [x] food cost
-  - [~] middle row
+  - [x] middle row
     - [x] victory points
     - [x] nest type
     - [x] egg capacity
-    - [ ] 'fan-made' disclaimer
+    - [x] 'fan-made' disclaimer
     - [x] wingspan
   - [~] photos
     - [x] remove background
     - [x] translateX, translateY, scale
     - [ ] brightness, contrast, saturation
     - [ ] crop
+    - [ ] investigate `KnicKnic/WASM-ImageMagick` for color correction
   - [~] powers
     - [x] power colors
     - [ ] tags (predator, flocking, bonus)
     - [x] text with inline symbols
       - [ ] handle synonym keywords
   - [~] bottom row
-    - [ ] distribution maps
+    - [~] distribution maps
     - [x] flavor text
     - [ ] expansion codes
 - [~] Card editor
-  - [ ] export
+  - [~] export
     - [ ] Save/load files
     - [~] Export to printable format
   - [x] link to relevant sites: Avibase, CoL, EoL, GBIF, iNaturalist, OToL, WikiData, xeno-canto
@@ -51,4 +52,3 @@
     - [x] form editor
 - [ ] Make a `stats` page to break down stats across expansions
 - [ ] Annotate relevant media (documentaries, videos, podcasts, etc) that mention a given species
-- [ ] investigate `KnicKnic/WASM-ImageMagick`

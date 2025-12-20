@@ -1,4 +1,5 @@
 import { preload, removeBackground, type Config } from '@imgly/background-removal';
+import { getCardMakerDb } from '~/utils/indexedDB';
 
 const config: Config = {
   progress: (key, curr, total) => {
@@ -18,17 +19,43 @@ function blobToBase64(blob: Blob) {
   });
 };
 
-const cache: Record<string, string> = {};
-const removeBackgroundFromUrl = async (url: string | Blob) => {
+const inMemoryCache: Record<string, string> = {};
+const removeBackgroundFromUrl = async (
+  url: string | Blob,
+  cacheStrategy: 'memory' | 'localStorage' | 'indexedDB' = 'indexedDB'
+) => {
   const cacheKey = typeof url === 'string' ? url : URL.createObjectURL(url);
 
-  if (!cache[cacheKey]) {
-    cache[cacheKey] = 'loading';
-    const src = await removeBackground(url).then(blobToBase64);
-    cache[cacheKey] = src;
-  }
+  switch (cacheStrategy) {
+    case 'memory':
+      if (!inMemoryCache[cacheKey]) {
+        inMemoryCache[cacheKey] = 'loading';
+        const src = await removeBackground(url).then(blobToBase64);
+        inMemoryCache[cacheKey] = src;
+      }
 
-  return cache[cacheKey];
+      return inMemoryCache[cacheKey];
+    case 'localStorage':
+      throw new Error('Not implemented');
+    case 'indexedDB': {
+      const db = await getCardMakerDb();
+      const value = await db.get('processed-photos', cacheKey);
+      let processedUrl = value?.processedUrl || null;
+      if (processedUrl === null) {
+        console.log(`Processing ${cacheKey}`);
+        processedUrl = await removeBackground(url).then(blobToBase64) || '';
+        await db.add('processed-photos', {
+          originalUrl: cacheKey,
+          processedUrl,
+          whenAccessed: Date.now(),
+          whenCreated: Date.now(),
+        });
+      }
+      // TODO: update whenAccessed otherwise
+
+      return processedUrl;
+    }
+  }
 };
 
 export default removeBackgroundFromUrl;

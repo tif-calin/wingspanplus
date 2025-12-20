@@ -1,12 +1,10 @@
 import { styled } from '@linaria/react';
 import React, { type ComponentProps } from 'react';
 import HabitatInfo from './HabitatInfo';
-import removeBackgroundFromUrl from '../../utils/removeBackgroundFromUrl';
 import LeftSideBarInfo from './LeftSideBarInfo';
 import BirdImage from './BirdImage';
 import Icon from '../Icon';
 import Power from './Power';
-import useLocalStorage from '../../hooks/useLocalStorage';
 
 const Wrapper = styled.div`
   /* https://onlinejpgtools.com/find-dominant-jpg-colors */
@@ -155,20 +153,6 @@ const WingspanCard = React.memo(({
   victoryPoints,
   wingspan,
 }: Props) => {
-  // TODO: move all this to BirdImge component
-  const [imageSrc, setImageSrc] = React.useState('');
-  const [imageNoBgSrc, setImageNoBgSrc] = useLocalStorage(photo?.url || '', '');
-  React.useEffect(() => {
-    if (!photo?.url) return;
-    if (imageSrc) return;
-    if (photo?.removeBg) {
-      if (imageNoBgSrc) return;
-      removeBackgroundFromUrl(photo?.url).then(data => {
-        if (data?.length > 100) setImageNoBgSrc(data);
-      });
-    }
-    else setImageSrc(photo?.url);
-  }, [imageNoBgSrc, imageSrc, photo?.removeBg, photo?.url, setImageNoBgSrc]);
 
   return (
     <Wrapper id={id}>
@@ -182,8 +166,9 @@ const WingspanCard = React.memo(({
       <MiddleRow>
         <LeftSideBarInfo eggCapacity={eggCapacity} nestKind={nestKind} victoryPoints={victoryPoints} />
         <BirdImage
-          imageSrc={imageNoBgSrc || imageSrc}
+          imageSrc={photo?.url || ''}
           altText={`bird photo of ${nameCommon}`}
+          removeBg={photo?.removeBg}
           scale={photo?.scale}
           translateX={photo?.translateX}
           translateY={photo?.translateY}
