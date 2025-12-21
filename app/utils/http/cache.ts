@@ -10,7 +10,7 @@ export const saveCache = (cache: Record<string, string> = CACHE) => {
   saveToLocalStorage(CACHE_KEY, JSON.stringify(cache));
 };
 
-export function loadCache() {
+function loadCache() {
   const data = loadFromLocalStorage(CACHE_KEY) || '{}';
   return JSON.parse(data);
 };

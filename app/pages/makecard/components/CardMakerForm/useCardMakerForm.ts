@@ -1,9 +1,7 @@
-import { useCallback, useRef, useState, type ComponentProps, type Dispatch, type DOMAttributes, type FormEventHandler, type SetStateAction } from 'react';
-import { matchLatinName } from '../../utils/http/checklistbank';
-import { deepMerge, filterObject, objectFromEntries } from '~/utils/objects';
+import { useCallback, useMemo, useRef, useState, type ComponentProps, type Dispatch, type DOMAttributes, type FormEventHandler, type SetStateAction } from 'react';
+import { deepMerge } from '~/utils/objects';
 import type { FanmadeBirdRow, OfficialBirdRow } from '~/data/official-birds';
 import getWikiData from '~/utils/http/getWikiData';
-import type WingspanCard from '../WingspanCard';
 import type { DeepPartial } from '~/utils/utilityTypes';
 import { DEFAULT_CARDS } from './default-cards';
 import type WingspanCard from '../WingspanCard';
@@ -25,7 +23,8 @@ const useCardMakerForm = ({
   setWikiData,
 }: UseCardMakerFormParams) => {
   const formRef = useRef<HTMLFormElement>(null);
-  const [formValues, setFormValues] = useState(DEFAULT_VALUES);
+  const [editedValues, setEditedValues] = useState<Partial<ComponentProps<typeof WingspanCard>>>({});
+  const [recommendedValues, setRecommendedValues] = useState<Partial<ComponentProps<typeof WingspanCard>>>({});
 
   const handleChange = useCallback<FormEventHandler<HTMLFormElement>>(event => {
     const formElement = event.currentTarget;
@@ -40,8 +39,14 @@ const useCardMakerForm = ({
 
     const newFormValues = editedKey.split('.').reverse().reduce((acc, currKey) => ({ [currKey]: acc }), editedVal as DeepPartial<typeof formValues>);
 
-    setFormValues(deepMerge(formValues, deepMerge(recommendedValues, newFormValues)));
-  }, [formValues, recommendedValues]);
+    setEditedValues(oldVals => deepMerge(oldVals, newFormValues));
+  }, []);
+
+  // eslint-disable-next-line react-hooks/preserve-manual-memoization
+  const formValues = useMemo(
+    () => deepMerge(defaultOfTheDay, deepMerge(recommendedValues, editedValues)),
+    [editedValues, recommendedValues]
+  );
 
   const handleValidateLatinName = useCallback<NonNullable<DOMAttributes<HTMLButtonElement>['onClick']>>(
     async (ev) => {
@@ -67,9 +72,8 @@ const useCardMakerForm = ({
       const wikidata = await getWikiData(latinName);
       setWikiData(wikidata);
 
-      const recommendedValues = await constructRecommendedValues({
-        avibaseId: wikidata.identifiers.find(id => id.propertyId === 'P2026')?.id || '',
-      });
+      const avibaseId = wikidata.identifiers.find(id => id.propertyId === 'P2026')?.id || '';
+      const recommendedValues = await constructRecommendedValues({ avibaseId });
       setRecommendedValues(recommendedValues);
     },
     [setClassification, setFanmadeCards, setOfficialCards, setWikiData]

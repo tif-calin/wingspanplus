@@ -1,6 +1,22 @@
 import type { ComponentProps } from 'react';
 import type WingspanCard from '../WingspanCard';
 
+export const BLANK_CARD: ComponentProps<typeof WingspanCard> = {
+  eggCapacity: 0,
+  flavor: '',
+  foodCost: '[no-food]',
+  forest: false,
+  grassland: false,
+  wetland: false,
+  nameCommon: '',
+  nameLatin: '',
+  nestKind: null,
+  photo: undefined,
+  power: undefined,
+  victoryPoints: 0,
+  wingspan: 0,
+};
+
 export const DEFAULT_CARDS: Array<ComponentProps<typeof WingspanCard>> = [
   // Baja California Hummingbird
   {
@@ -55,6 +71,7 @@ export const DEFAULT_CARDS: Array<ComponentProps<typeof WingspanCard>> = [
 
 
 export const EXAMPLES = [
+  // Mallard
   {
     eggCapacity: 4,
     flavor: 'The Muscovy is the only domestic duck breed whose ancestors are not mallards.',
@@ -78,30 +95,7 @@ export const EXAMPLES = [
     victoryPoints: 0,
     wingspan: 89,
   },
-  {
-    eggCapacity: 2,
-    flavor: 'Male buzzards make a spectacular breeding display, flying high then spiraling down over and over.',
-    foodCost: '[rodent]', // TODO: support asterisks in food costs
-    forest: true,
-    grassland: true,
-    wetland: true,
-    nameCommon: 'Common Buzzard',
-    nameLatin: 'Buteo buteo', // https://navarog.github.io/wingsearch/card/78
-    nestKind: 'platform',
-    photo: {
-      removeBg: true,
-      scale: 1.3,
-      translateX: 10,
-      translateY: -5,
-      url: 'https://inaturalist-open-data.s3.amazonaws.com/photos/343655188/original.jpeg',
-    },
-    power: {
-      kind: 'WHEN PLAYED',
-      text: 'Instead of paying any costs, you may play this bird on top of another bird on your player mat. Discard any eggs and food from that bird. It becomes a tucked card.',
-    },
-    victoryPoints: 4,
-    wingspan: 123,
-  },
+  // Canada Goose
   {
     eggCapacity: 3,
     flavor: 'The oldest known Canada Goose was at least 33 years old.',
@@ -125,5 +119,30 @@ export const EXAMPLES = [
     },
     victoryPoints: 3,
     wingspan: 132,
+  },
+  // Common Buzzard
+  {
+    eggCapacity: 2,
+    flavor: 'Male buzzards make a spectacular breeding display, flying high then spiraling down over and over.',
+    foodCost: '[rodent]', // TODO: support asterisks in food costs
+    forest: true,
+    grassland: true,
+    wetland: true,
+    nameCommon: 'Common Buzzard',
+    nameLatin: 'Buteo buteo', // https://navarog.github.io/wingsearch/card/78
+    nestKind: 'platform',
+    photo: {
+      removeBg: true,
+      scale: 1.3,
+      translateX: 10,
+      translateY: -5,
+      url: 'https://inaturalist-open-data.s3.amazonaws.com/photos/343655188/original.jpeg',
+    },
+    power: {
+      kind: 'WHEN PLAYED',
+      text: 'Instead of paying any costs, you may play this bird on top of another bird on your player mat. Discard any eggs and food from that bird. It becomes a tucked card.',
+    },
+    victoryPoints: 4,
+    wingspan: 123,
   },
 ] satisfies ComponentProps<typeof WingspanCard>[];

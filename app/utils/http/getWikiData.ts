@@ -47,6 +47,27 @@ const getWikiData = async (latinName: string) => {
   const avibaseId = claimsResult.claims['P2026']?.at(0).mainsnak.datavalue.value;
   if (!avibaseId) clearCache(`GET::||${urlWbGetClaims}`);
 
+  const identifiers = PAGES.map(page => {
+    const { propertyId } = page;
+
+    let id = '';
+    switch (propertyId) {
+      case 'P2026': // Avibase
+        id = avibaseId.slice(0, 8);
+        break;
+      case null: // Wikidata
+        id = wikidataId;
+        break;
+      default:
+        id = claimsResult.claims[propertyId]?.at(0).mainsnak.datavalue.value;
+    }
+
+    if (!id) return null;
+
+    const url =  page.url.replace('{{ID}}', id);
+    return { ...page, url, id, };
+  }).filter(notEmpty);
+
   return {
     names: {
       ...objectFromEntries(
@@ -57,26 +78,7 @@ const getWikiData = async (latinName: string) => {
         }) as [string, string][]
       )
     },
-    identifiers: PAGES.map(page => {
-      const { propertyId } = page;
-
-      let id = '';
-      switch (propertyId) {
-        case 'P2026': // Avibase
-          id = avibaseId.slice(0, 8);
-          break;
-        case null: // Wikidata
-          id = wikidataId;
-          break;
-        default:
-          id = claimsResult.claims[propertyId]?.at(0).mainsnak.datavalue.value;
-      }
-
-      if (!id) return null;
-
-      const url =  page.url.replace('{{ID}}', id);
-      return { ...page, url, id, };
-    }).filter(notEmpty),
+    identifiers,
   };
 };
 
