@@ -3,9 +3,9 @@ import { deepMerge } from '~/utils/objects';
 import type { FanmadeBirdRow, OfficialBirdRow } from '~/data/official-birds';
 import getWikiData from '~/utils/http/getWikiData';
 import type { DeepPartial } from '~/utils/utilityTypes';
-import { DEFAULT_CARDS } from './default-cards';
 import type WingspanCard from '../WingspanCard';
-import { constructRecommendedValues, constructTaxonomy, findFanmadeCards, findOfficialCards } from '../../hooks/useCardMakerForm/utils';
+import { constructRecommendedValues } from '../../hooks/useCardMakerForm/utils';
+import { BLANK_CARD } from './default-cards';
 
 type UseCardMakerFormParams = {
   setClassification: Dispatch<SetStateAction<string[]>>;
@@ -13,8 +13,6 @@ type UseCardMakerFormParams = {
   setOfficialCards: Dispatch<SetStateAction<Record<string, OfficialBirdRow[]> | undefined>>;
   setWikiData: Dispatch<SetStateAction<Awaited<ReturnType<typeof getWikiData>> | undefined>>;
 };
-
-const defaultOfTheDay = DEFAULT_CARDS[(new Date().getDate()) % DEFAULT_CARDS.length];
 
 const useCardMakerForm = ({
   setClassification,
@@ -44,7 +42,9 @@ const useCardMakerForm = ({
 
   // eslint-disable-next-line react-hooks/preserve-manual-memoization
   const formValues = useMemo(
-    () => deepMerge(defaultOfTheDay, deepMerge(recommendedValues, editedValues)),
+    () => {
+      return deepMerge(BLANK_CARD, deepMerge(recommendedValues, editedValues));
+    },
     [editedValues, recommendedValues]
   );
 
@@ -57,24 +57,27 @@ const useCardMakerForm = ({
       const latinName = formData.get('nameLatin');
       if (typeof latinName !== 'string') throw new Error('Invalid Latin name');
 
-      const taxonomy = await constructTaxonomy(latinName);
-      if (!taxonomy) throw new Error('Taxonomy not found');
-
-      const speciesName = `${taxonomy.species[0]}. ${taxonomy.species.split(/\s/).at(-1) || ''}`;
-      setClassification([ ...Object.values(taxonomy).slice(0, -1), speciesName ]);
-
-      const officialCards = await findOfficialCards(taxonomy.species, taxonomy.genus, taxonomy.family, taxonomy.order);
-      setOfficialCards(officialCards);
-
-      const fanmadeCards = await findFanmadeCards(latinName, speciesName);
+      const {
+        classification,
+        fanmadeCards,
+        officialCards,
+        recommendedValues,
+        wikidata
+      } = await constructRecommendedValues(latinName);
+      setClassification(classification);
       setFanmadeCards(fanmadeCards);
-
-      const wikidata = await getWikiData(latinName);
+      setOfficialCards(officialCards);
       setWikiData(wikidata);
-
-      const avibaseId = wikidata.identifiers.find(id => id.propertyId === 'P2026')?.id || '';
-      const recommendedValues = await constructRecommendedValues({ avibaseId });
       setRecommendedValues(recommendedValues);
+
+      // const mergedVals = flattenObject(deepMerge(recommendedValues, editedValues));
+      // Object.entries(mergedVals).forEach(([key, newVal]) => {
+      //   console.log(key, newVal);
+      //   const input = form.querySelector(`[name="${key}"]`);
+      //   console.log(input);
+      //   if (input) input.value = JSON.stringify(newVal);
+      //   formData.set(key, JSON.stringify(newVal));
+      // });
     },
     [setClassification, setFanmadeCards, setOfficialCards, setWikiData]
   );

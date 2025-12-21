@@ -29,8 +29,9 @@ const PowerText = styled.span`
   }
 `;
 
-const POWER_COLOR_LOOKUP: Record<Props['kind'], string | null> = {
+export const POWER_COLOR_LOOKUP: Record<Props['kind'], string | null> = {
   'GAME END': 'yellow',
+  'NONE': null,
   'ONCE BETWEEN TURNS': 'pink',
   'ROUND END': 'teal',
   'WHEN ACTIVATED': 'brown',
@@ -38,7 +39,8 @@ const POWER_COLOR_LOOKUP: Record<Props['kind'], string | null> = {
 };
 
 type Props = {
-  kind: 'WHEN ACTIVATED' | 'ONCE BETWEEN TURNS' | 'WHEN PLAYED' | 'ROUND END' | 'GAME END'; // TODO: handle none
+  kind: 'WHEN ACTIVATED' | 'ONCE BETWEEN TURNS' | 'WHEN PLAYED' | 'ROUND END' | 'GAME END' | 'NONE';
+  tag?: 'predator' | 'flocking' | 'bonus';
   text: string;
 };
 
@@ -46,6 +48,7 @@ const Power = ({ text, kind }: Props) => {
   const color = POWER_COLOR_LOOKUP[kind];
   const style = useMemo(() => color ? { backgroundImage: `url("/assets/${color}.png")` } : undefined, [color]);
 
+  if (kind === 'NONE') return null;
   return (
     <PowerWrapper style={style}>
       <span>{kind}</span>: <PowerText><TextWithInlineIcons text={text} /></PowerText>

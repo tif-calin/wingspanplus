@@ -40,6 +40,30 @@ export const objectFromEntries = <T extends ReadonlyArray<readonly [PropertyKey,
 ) => Object.fromEntries(entries) as { [K in T[number] as K[0]]: K[1] };
 
 /**
+ * Recursively flattens an objects keys.
+ *
+ * @example
+ * flattenObject({ a: { b: 1, c: { d: 2 } } }) // { 'a.b': 1, 'a.c.d': 2 }
+ */
+export const flattenObject = <T extends Record<string, unknown>>(
+  obj: T
+) => {
+  const flatObj: Record<string, unknown> = {};
+
+  Object.entries(obj).forEach(([key, value]) => {
+    if (typeof value === 'object' && value !== null) {
+      Object.entries(flattenObject(value as Record<string, unknown>)).forEach(([subkey, subvalue]) => {
+        flatObj[`${key}.${subkey}`] = subvalue;
+      });
+    } else {
+      flatObj[key] = value;
+    }
+  });
+
+  return flatObj;
+};
+
+/**
  * Filters key/values of an object.
  */
 export const filterObject = <T extends Record<string, T[keyof T]>>(
