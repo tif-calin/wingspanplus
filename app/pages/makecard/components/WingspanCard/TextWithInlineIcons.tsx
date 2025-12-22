@@ -1,36 +1,10 @@
 import { useMemo, type ReactNode } from 'react';
 import Icon from '../Icon';
 import { styled } from '@linaria/react';
+import { ALL_KEYWORDS, KEYWORD_SYNONYMS } from '../../types';
 
-const SPECIAL_STRINGS = `
-  bowl
-  cavity
-  card
-  dice
-  egg
-  fish
-  flocking
-  forest
-  fruit
-  grassland
-  ground
-  invertebrate
-  nectar
-  platform
-  predator
-  rodent
-  seed
-  star
-  wetland
-  wild
-`.split(/\s+/).filter(Boolean).map(s => `${s.trim()}`);
-const SPECIAL_REGEX_STRING = `\\[(${SPECIAL_STRINGS.join('|')})\\]`;
+const SPECIAL_REGEX_STRING = `\\[(${ALL_KEYWORDS.join('|')})\\]`;
 const SPECIAL_REGEX = new RegExp(SPECIAL_REGEX_STRING, 'g');
-
-type Props = {
-  className?: string;
-  text: string;
-};
 
 const Wrapper = styled.span`
   & img {
@@ -41,6 +15,11 @@ const Wrapper = styled.span`
   }
 `;
 
+type Props = {
+  className?: string;
+  text: string;
+};
+
 /**
  * Intended for both food cost and power text.
  *
@@ -50,11 +29,13 @@ const TextWithInlineIcons = ({ text }: Props) => {
   const parsed = useMemo<ReactNode[]>(() => {
     return text.split(SPECIAL_REGEX).map((part, index) => {
 
-      // TODO: replace 'as any' with type guard
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      return (index % 2) ? <Icon altText={part} icon={part as any} /> : part;
+      if (index % 2) {
+        const keyword = KEYWORD_SYNONYMS[part] || part;
+        return <Icon key={index} altText={part} icon={keyword} />
+      }
+      else return part;
     })
-  }, [text])
+  }, [text]);
 
   return <Wrapper>{parsed}</Wrapper>;
 };

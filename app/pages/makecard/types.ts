@@ -13,12 +13,18 @@ type InlineTextEnum = (typeof InlineTextEnum)[number];
 const UiEnum = ['smallegg', 'point', 'wingspan', ] as const;
 type UiEnum = (typeof UiEnum)[number];
 
-// type Keyword = FoodEnum | PowerTagEnum | NestEnum | HabitatEnum | InlineTextEnum | UiEnum;
-// const SYNONYMS: Record<Keyword, string[]> = {
-//   'bonus-card': ['bonus'],
-//   card: ['bird'],
-//   dice: ['die'],
-//   wild: ['food']
-// };
+const KEYWORDS = [...FoodEnum, ...PowerTagEnum, ...NestEnum, ...HabitatEnum, ...InlineTextEnum, ...UiEnum] as const;
+type Keyword = (typeof KEYWORDS)[number];
+export const KEYWORD_SYNONYMS: Record<string, Keyword> = {
+  'bird': 'card',
+  'bonus': 'bonus-card',
+  'die': 'dice',
+  'food': 'wild',
+  'small-egg': 'smallegg',
+};
+export const ALL_KEYWORDS = [
+  ...KEYWORDS,
+  ...Object.keys(KEYWORD_SYNONYMS),
+];
 
 export type { FoodEnum, PowerTagEnum, NestEnum, HabitatEnum, InlineTextEnum, UiEnum };
