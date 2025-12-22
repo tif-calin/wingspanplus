@@ -28,6 +28,8 @@ type OptsHttpRequest = {
   isLoud?: boolean;
   /** @default 'text' */
   readAs?: Extract<MethodKeys<Body>,  'json' | 'text'>;
+  /** @default true */
+  shouldUseCache?: boolean;
   /** @default false */
   withProxy?: boolean;
 };
@@ -50,6 +52,7 @@ const httpRequest = async (
     crawlDelay = 69,
     isLoud = !!import.meta.env.DEV,
     readAs = 'text',
+    shouldUseCache = true,
     withProxy = false,
   } = opts;
 
@@ -57,7 +60,7 @@ const httpRequest = async (
 
   if (isLoud) console.group(`httpRequest: ${requestId}`);
 
-  if (CACHE[requestId]) {
+  if (CACHE[requestId] && shouldUseCache) {
     if (isLoud) console.info('Cache hit!');
   } else {
     const urlWithProxy = `${withProxy ? PROXY_URLS[0] : ''}${url}`; // TODO: make dynamic
@@ -67,6 +70,10 @@ const httpRequest = async (
     if (isLoud) console.info('Status:', status);
     const data = await (readAs === 'json' ? response.json() : response.text());
     if (status <= 299) {
+      if (!shouldUseCache) {
+        console.groupEnd();
+        return data;
+      }
       CACHE[requestId] = JSON.stringify(data);
       saveCache();
     }

@@ -1,4 +1,4 @@
-import httpRequest from './httpRequest';
+import httpRequest from '../http/httpRequest';
 
 const CRAWL_DELAY = 2_000;
 const BASE_URL = 'https://avibase.bsc-eoc.org/api/v2/taxon/lifehistory';

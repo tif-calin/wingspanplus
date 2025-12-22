@@ -1,7 +1,7 @@
 import { notEmpty } from '../notEmpty';
 import { objectFromEntries } from '../objects';
-import { clearCache } from './cache';
-import httpRequest from './httpRequest';
+import { clearCache } from '../http/cache';
+import httpRequest from '../http/httpRequest';
 
 const BASE_URL = 'https://www.wikidata.org/w/api.php';
 

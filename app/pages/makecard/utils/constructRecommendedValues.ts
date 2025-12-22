@@ -1,13 +1,14 @@
 import type { ComponentProps } from 'react';
-import type WingspanCard from '../../components/WingspanCard';
-import { matchLatinName } from '../../utils/http/checklistbank';
 import { filterObject, groupItemsByFunction, objectFromEntries } from '~/utils/objects';
-import getAvibase from '~/utils/http/getAvibase';
+import getAvibase from '~/utils/services/avibase';
 import { notEmpty } from '~/utils/notEmpty';
-import getWikiData from '~/utils/http/getWikiData';
+import getWikiData from '~/utils/services/wikidata';
 import { toTitleCase } from '~/utils/strings';
-import { seededRandom } from '../../utils/random';
 import { officialRowToCard } from '~/data/official-birds';
+import { seededRandom } from './random';
+import type WingspanCard from '../components/WingspanCard';
+import { matchLatinName } from '~/utils/services/checklistbank';
+import { getPhoto } from '~/utils/services/inaturalist';
 
 const groupAvibaseData = (data: Record<string, string | number | null>[]) =>
   groupItemsByFunction(data, (item) => `${item['categ']}::${item['subcateg']}` as string)
@@ -435,6 +436,12 @@ export const constructRecommendedValues = async (latinName: string) => {
     recommendedValues.nameCommon = toTitleCase(wikidata.names[opts.preferredLang]);
   }
 
+  const inatId = wikidata.identifiers.find(id => id.propertyId === 'P3151')?.id || '';
+  if (inatId) {
+    const photo = await getPhoto(inatId);
+    recommendedValues.photo = { url: photo, removeBg: true };
+  }
+
   // Avibase
   const avibaseId = wikidata.identifiers.find(id => id.propertyId === 'P2026')?.id || '';
 
@@ -465,7 +472,7 @@ export const constructRecommendedValues = async (latinName: string) => {
   // Official cards by taxonomic rank
   const officialCards = await findOfficialCards(taxonomy.species, taxonomy.genus, taxonomy.family, taxonomy.order);
 
-  if (officialCards.species.length) {
+  if (officialCards.species?.length) {
     const officialMatch = officialRowToCard(officialCards.species[0]);
     recommendedValues = { ...recommendedValues, ...officialMatch };
   }
@@ -482,7 +489,7 @@ export const constructRecommendedValues = async (latinName: string) => {
   };
 };
 
-export const constructTaxonomy = async (latinName: string) => {
+const constructTaxonomy = async (latinName: string) => {
   const data = await matchLatinName(latinName);
   if (!data.match) throw new Error('Taxonomy not found');
 
@@ -494,7 +501,7 @@ export const constructTaxonomy = async (latinName: string) => {
   return { ...objectFromEntries(ranks), species: name, };
 };
 
-export const findFanmadeCards = async (latinName: string, commonName: string) => {
+const findFanmadeCards = async (latinName: string, commonName: string) => {
   const { FANMADE_BIRDS_DATA } = await import('~/data/official-birds');
 
   const firstPass = FANMADE_BIRDS_DATA.filter(bird => bird.latin === latinName || bird.common === commonName);
@@ -509,7 +516,7 @@ export const findFanmadeCards = async (latinName: string, commonName: string) =>
 /**
  * Finds official birds in the same species, genus, family, or order.
  */
-export const findOfficialCards = async (
+const findOfficialCards = async (
   speciesName: string,
   genusName: string,
   familyName: string,
