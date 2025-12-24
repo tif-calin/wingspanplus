@@ -47,7 +47,9 @@ export const OFFICIAL_BIRDS_DATA = await fetch('/assets/cards-official.csv')
   })
 ;
 
-const makeFoodCost = (row: OfficialBirdRow): FoodString => {
+const makeFoodCost = (
+  row: Partial<OfficialBirdRow>
+): FoodString => {
   let foodCost = ([
     'Invertebrate',
     'Seed',
@@ -63,7 +65,7 @@ const makeFoodCost = (row: OfficialBirdRow): FoodString => {
     return acc;
   }, [] as `[${FoodEnum}]`[]).join(' + ');
 
-  if (row['/ (food cost)'] === 'X') foodCost.replaceAll('+', '/');
+  if (row['/ (food cost)'] === 'X') foodCost = foodCost.replaceAll('+', '/');
   if (row['* (food cost)'] === 'X') foodCost = `*${foodCost}`;
 
   return foodCost as FoodString;
@@ -121,3 +123,28 @@ export const FANMADE_BIRDS_DATA = await fetch('/assets/cards-fanmade.csv')
     return data;
   })
 ;
+
+// ———————————————————————————————————— //
+// #region __TESTS__                    //
+
+if (import.meta.vitest) {
+  const { describe, expect, test } = import.meta.vitest;
+
+  describe('makeFoodCost', () => {
+    test('it works', () => {
+      const expected = '*[invertebrate] / [fish]';
+
+      expect(
+        makeFoodCost({
+          Invertebrate: '1',
+          Fish: '1',
+          '/ (food cost)': 'X',
+          '* (food cost)': 'X',
+        })
+      ).toBe(expected);
+    });
+  });
+}
+
+// #endregion __TESTS__                 //
+// ———————————————————————————————————— //

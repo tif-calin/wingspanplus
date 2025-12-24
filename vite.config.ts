@@ -1,3 +1,5 @@
+/// <reference types="vitest/config" />
+
 import { defineConfig } from "vite";
 import { reactRouter } from "@react-router/dev/vite";
 import wyw from "@wyw-in-js/vite";
@@ -16,4 +18,7 @@ export default defineConfig({
     tsconfigPaths(),
   ],
   build: { target: "es2022", },
+  test: {
+    includeSource: ['app/**/*.{js,ts}'],
+  },
 });
