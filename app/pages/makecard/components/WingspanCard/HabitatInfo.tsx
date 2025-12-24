@@ -47,7 +47,7 @@ const FoodRow = styled(TextWithInlineIcons)`
 
 type FoodCost = `[${FoodEnum}]`;
 type FoodStringSplit = ' + ' | ' / ';
-type FoodString = `${FoodCost}${`${FoodStringSplit}${FoodCost}` | ''}`
+export type FoodString = `${'*' | ''}${FoodCost}${`${FoodStringSplit}${FoodCost}` | ''}`
 
 type Props = {
   foodCost: FoodString;

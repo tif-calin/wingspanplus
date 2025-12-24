@@ -1,111 +1,13 @@
 import type { ComponentProps } from 'react';
-import { filterObject, groupItemsByFunction, objectFromEntries } from '~/utils/objects';
-import getAvibase from '~/utils/services/avibase';
-import { notEmpty } from '~/utils/notEmpty';
+import { deepMerge, filterObject, objectFromEntries } from '~/utils/objects';
+import { getAvibaseData } from '~/utils/services/avibase';
 import getWikiData from '~/utils/services/wikidata';
 import { toTitleCase } from '~/utils/strings';
 import { officialRowToCard } from '~/data/official-birds';
-import { seededRandom } from './random';
 import type WingspanCard from '../components/WingspanCard';
 import { matchLatinName } from '~/utils/services/checklistbank';
 import { getPhoto } from '~/utils/services/inaturalist';
-
-const groupAvibaseData = (data: Record<string, string | number | null>[]) =>
-  groupItemsByFunction(data, (item) => `${item['categ']}::${item['subcateg']}` as string)
-;
-
-const parseAvibaseData = (data: ReturnType<typeof groupAvibaseData>): Record<string, { values: string[] } | { sample: number; avg: number }> => {
-  return Object.fromEntries(
-    [
-      ['DISTRIB::MIGRATION', 'string'],
-      // ['DISTRIB::RANGE_SIZE', 'area'],
-      ['HABITAT::DENSITY', 'string'],
-      ['HABITAT::DESCR', 'string'],
-      ['HABITAT::LIFESTYLE', 'string'],
-      ['FOOD::DESCR', 'string'],
-      ['FOOD::FORAGINGNICHE', 'string'],
-      ['FOOD::TROPHICLEVEL', 'string'],
-      ['FOOD::TROPHICNICHE', 'string'],
-      ['REPROD::SYSTEM', 'string'],
-      ['REPROD::PARASITIC', 'string'],
-      ['REPROD::NESTSTRUCT', 'string'],
-      ['REPROD::NESTSITE', 'string'],
-      ['REPROD::NESTATTACHM', 'string'],
-      ['BODY::MASS', 'weight'],
-      ['BODY::MASS_F', 'weight'],
-      ['BODY::MASS_M', 'weight'],
-      ['BODY::MASS_U', 'weight'],
-      ['BODY::BILL_F', 'length'],
-      ['BODY::BILL_M', 'length'],
-      ['BODY::BILL_U', 'length'],
-      ['BODY::TAIL_F', 'length'],
-      ['BODY::TAIL_M', 'length'],
-      ['BODY::TAIL_U', 'length'],
-      ['BODY::TARSUS_F', 'length'],
-      ['BODY::TARSUS_M', 'length'],
-      ['BODY::TARSUS_U', 'length'],
-      ['BODY::WING_F', 'length'],
-      ['BODY::WING_M', 'length'],
-      ['BODY::WING_U', 'length'],
-      ['BODY::WING_HWI_F', 'length'],
-      ['BODY::WING_HWI_M', 'length'],
-      ['BODY::WING_HWI_U', 'length'],
-      ['BODY::WING_KIPPS_F', 'length'],
-      ['BODY::WING_KIPPS_M', 'length'],
-      ['BODY::WING_KIPPS_U', 'length'],
-      ['SURVIVAL::MAXAGE', 'index'],
-      ['REPROD::AGE1ST', 'index'],
-      ['REPROD::CLUTCHSZ', 'index'],
-      ['REPROD::INCUBATION', 'index'],
-      ['EGGS::MASS', 'weight'],
-    ].map(([key, kind]) => {
-      const values = data[key];
-
-      if (!values?.length) return null;
-
-      switch (kind) {
-        case 'string':
-          return [key, { values: (values.map(val => val.value) as string[]) }] as const;
-        case 'index':
-        case 'weight':
-        case 'length': {
-          const sample = values.reduce((acc, val) => acc + (Number(val.samplesize) || 1), 0);
-          const totalVal = values
-            .map(val => {
-              let value = val.value;
-              if (typeof value === 'string' && /[\d.]+-[\d.]/.test(value)) {
-                value = value.split('-').map(Number).reduce((a, b) => a + b, 0) / 2;
-              } else value = Number(value);
-
-              const unit = val.units;
-              switch (unit) {
-                case 'in':
-                case 'inches':
-                  value *= 2.54;
-                  break;
-                case 'cm':
-                case 'centimeters':
-                case 'g':
-                case 'grams':
-                  break;
-                default:
-                  console.error(`Unknown unit: ${unit} for ${key}`);
-              }
-
-              return value * (Number(val.samplesize) || 1);
-            })
-            .reduce((acc, val) => acc + val, 0);
-          let avg = totalVal / sample;
-          if (!sample) avg ||= Number(values[0].value);
-
-          return [key, { sample, avg }] as const;
-        }
-        default:
-          return null as never;
-      }
-    }).filter(notEmpty)
-  );
-};
+import { seededRandom } from '~/utils/random';
 
 /**
  * I took all the official species and ran some simple linear regressions. The x here is various
@@ -388,7 +290,7 @@ const REGRESSION_VALUES = [
 ];
 
 const estimateValue = (
-  data: ReturnType<typeof parseAvibaseData>,
+  data: Awaited<ReturnType<typeof getAvibaseData>>,
   imTryingToEstimate: 'wingspan' | 'eggCapacity' | 'victoryPoints'
 ) => {
   const iHave = new Set(Object.keys(data));
@@ -445,22 +347,20 @@ export const constructRecommendedValues = async (latinName: string) => {
   // Avibase
   const avibaseId = wikidata.identifiers.find(id => id.propertyId === 'P2026')?.id || '';
 
-  const rawData = await getAvibase(avibaseId);
-  const groupedData = groupAvibaseData(rawData);
-  const parsedData = parseAvibaseData(groupedData);
+  const avibaseData = await getAvibaseData(avibaseId);
 
-  const estimatedWingspan = estimateValue(parsedData, 'wingspan');
+  const estimatedWingspan = estimateValue(avibaseData, 'wingspan');
   if (estimatedWingspan) {
     const [val, { error }] = estimatedWingspan;
     console.log(`Estimated wingspan: ${val} ± ${error}`);
     recommendedValues.wingspan = Math.round(val);
   }
-  const estimatedEggCapacity = estimateValue(parsedData, 'eggCapacity');
+  const estimatedEggCapacity = estimateValue(avibaseData, 'eggCapacity');
   if (estimatedEggCapacity) {
     console.log(`Estimated eggCapacity: ${estimatedEggCapacity[0]} ± ${estimatedEggCapacity[1].error}`);
     recommendedValues.eggCapacity = Math.round(estimatedEggCapacity[0]);
   }
-  const estimatedVictoryPoints = estimateValue(parsedData, 'victoryPoints');
+  const estimatedVictoryPoints = estimateValue(avibaseData, 'victoryPoints');
   if (estimatedVictoryPoints) {
     const [val, { error }] = estimatedVictoryPoints;
     const withVariance = Math.round(val + (seededRandom(speciesName) * 2 * error) - error);
@@ -468,13 +368,23 @@ export const constructRecommendedValues = async (latinName: string) => {
     console.log(`Estimated victoryPoints: ${val} ± ${error} --> ${withVariance}`);
     recommendedValues.victoryPoints = withVariance;
   }
+  if (avibaseData['HABITAT::DESCR'] && 'values' in avibaseData['HABITAT::DESCR']) {
+    console.log('HABITAT::DESCR', avibaseData['HABITAT::DESCR'].values);
+    const habitats = new Set(
+      avibaseData['HABITAT::DESCR'].values.map(habitat => habitat.toLocaleLowerCase())
+    );
+
+    if (['forest', 'open woodland', 'woodland'].some(s=>habitats.has(s))) recommendedValues.forest = true;
+    if (['edge farmlands', 'grassland', 'open woodland', 'orchards', 'prairie', 'towns'].some(s=>habitats.has(s))) recommendedValues.grassland = true;
+    if (['coastal', 'freshwater', 'marine', 'water', 'wetland'].some(s=>habitats.has(s))) recommendedValues.wetland = true;
+  }
 
   // Official cards by taxonomic rank
   const officialCards = await findOfficialCards(taxonomy.species, taxonomy.genus, taxonomy.family, taxonomy.order);
 
   if (officialCards.species?.length) {
     const officialMatch = officialRowToCard(officialCards.species[0]);
-    recommendedValues = { ...recommendedValues, ...officialMatch };
+    recommendedValues = deepMerge(recommendedValues, officialMatch);
   }
 
   // Fan-made cards

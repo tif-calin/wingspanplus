@@ -1,11 +1,11 @@
 import { useCallback, useMemo, useRef, useState, type ComponentProps, type Dispatch, type DOMAttributes, type FormEventHandler, type SetStateAction } from 'react';
 import { deepMerge } from '~/utils/objects';
 import type { FanmadeBirdRow, OfficialBirdRow } from '~/data/official-birds';
-import getWikiData from '~/utils/http/getWikiData';
+import getWikiData from '~/utils/services/wikidata';
 import type { DeepPartial } from '~/utils/utilityTypes';
 import type WingspanCard from '../WingspanCard';
-import { constructRecommendedValues } from '../../hooks/useCardMakerForm/utils';
 import { BLANK_CARD } from './default-cards';
+import { constructRecommendedValues } from '../../utils/constructRecommendedValues';
 
 type UseCardMakerFormParams = {
   setClassification: Dispatch<SetStateAction<string[]>>;
