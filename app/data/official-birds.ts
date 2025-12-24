@@ -1,6 +1,8 @@
 import Papa from 'papaparse';
 import type { ComponentProps } from 'react';
 import WingspanCard from '~/pages/makecard/components/WingspanCard';
+import type { FoodString } from '~/pages/makecard/components/WingspanCard/HabitatInfo';
+import type { FoodEnum } from '~/pages/makecard/types';
 
 export type OfficialBirdRow = {
   'Common name': string;
@@ -12,12 +14,21 @@ export type OfficialBirdRow = {
   'Flocking': 'X' | '';
   'Bonus card': 'X' | '';
   'Victory points': string;
-  'Nest type': 'platform' | 'wild' | 'cavity' | 'bowl' | 'ground';
+  'Nest type': 'bowl' | 'cavity' | 'ground' | 'platform' | 'wild';
   'Egg limit': `${number}`;
   'Wingspan': string;
   'Forest': 'X' | '';
   'Grassland': 'X' | '';
   'Wetland': 'X' | '';
+  'Invertebrate': `${number}` | '';
+  'Seed': `${number}` | '';
+  'Fish': `${number}` | '';
+  'Fruit': `${number}` | '';
+  'Rodent': `${number}` | '';
+  'Nectar': `${number}` | '';
+  'Wild (food)': `${number}` | '';
+  '/ (food cost)': 'X' | '';
+  '* (food cost)': 'X' | '';
 
   acceptedName: string;
   family: string;
@@ -35,6 +46,28 @@ export const OFFICIAL_BIRDS_DATA = await fetch('/assets/cards-official.csv')
     return data;
   })
 ;
+
+const makeFoodCost = (row: OfficialBirdRow): FoodString => {
+  let foodCost = ([
+    'Invertebrate',
+    'Seed',
+    'Fish',
+    'Fruit',
+    'Rodent',
+    'Nectar',
+    'Wild (food)',
+  ] as const).reduce((acc, column) => {
+    const keyword = column.split(' ')[0].toLocaleLowerCase() as `${FoodEnum}`;
+    Array.from({ length: Number(row[column]) }).forEach(_ => acc.push(`[${keyword}]`));
+
+    return acc;
+  }, [] as `[${FoodEnum}]`[]).join(' + ');
+
+  if (row['/ (food cost)'] === 'X') foodCost.replaceAll('+', '/');
+  if (row['* (food cost)'] === 'X') foodCost = `*${foodCost}`;
+
+  return foodCost as FoodString;
+};
 
 type Card = ComponentProps<typeof WingspanCard>;
 export const officialRowToCard = (row: OfficialBirdRow): Card => {
@@ -56,7 +89,7 @@ export const officialRowToCard = (row: OfficialBirdRow): Card => {
   return {
     eggCapacity: Number(row['Egg limit']),
     flavor: row['Flavor text'],
-    foodCost: '[no-food]', // TODO: more complex parsing logic here
+    foodCost: makeFoodCost(row),
     forest: row['Forest'] === 'X',
     grassland: row['Grassland'] === 'X',
     wetland: row['Wetland'] === 'X',
