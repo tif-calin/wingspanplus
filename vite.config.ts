@@ -18,7 +18,6 @@ export default defineConfig({
     tsconfigPaths(),
   ],
   build: { target: "es2022", },
-  test: {
-    includeSource: ['app/**/*.{js,ts}'],
-  },
+  define: { 'import.meta.vitest': 'undefined', },
+  test: { includeSource: ['app/**/*.{js,ts}'], },
 });

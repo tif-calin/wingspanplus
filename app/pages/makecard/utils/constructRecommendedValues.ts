@@ -1,13 +1,15 @@
 import type { ComponentProps } from 'react';
-import { deepMerge, filterObject, objectFromEntries } from '~/utils/objects';
+import { deepMerge, filterObject, objectFromEntries, objectKeys } from '~/utils/objects';
 import { getAvibaseData } from '~/utils/services/avibase';
 import getWikiData from '~/utils/services/wikidata';
-import { toTitleCase } from '~/utils/strings';
+import { fromCamelCaseToTitleCase, RE_SPECIES_NAME, toTitleCase } from '~/utils/strings';
 import { officialRowToCard } from '~/data/official-birds';
 import type WingspanCard from '../components/WingspanCard';
 import { matchLatinName } from '~/utils/services/checklistbank';
 import { getPhoto } from '~/utils/services/inaturalist';
 import { seededRandom } from '~/utils/random';
+import { tally } from '~/utils/arrays';
+import { getInteractions } from '~/utils/services/globi';
 
 /**
  * I took all the official species and ran some simple linear regressions. The x here is various
@@ -335,7 +337,7 @@ export const constructRecommendedValues = async (latinName: string) => {
   const wikidata = await getWikiData(latinName);
 
   if (wikidata.names[opts.preferredLang]) {
-    recommendedValues.nameCommon = toTitleCase(wikidata.names[opts.preferredLang]);
+    recommendedValues.nameCommon = toTitleCase(wikidata.names[opts.preferredLang])?.split(', ')[0];
   }
 
   const inatId = wikidata.identifiers.find(id => id.propertyId === 'P3151')?.id || '';
@@ -385,10 +387,53 @@ export const constructRecommendedValues = async (latinName: string) => {
   if (officialCards.species?.length) {
     const officialMatch = officialRowToCard(officialCards.species[0]);
     recommendedValues = deepMerge(recommendedValues, officialMatch);
+  } else {
+    const closestRank = (['genus', 'family', 'order'] as const).find(rank => officialCards[rank]);
+    if (closestRank) {
+      const officialCardsInClosestRank = officialCards[closestRank].map(officialRowToCard);
+      const nestTally = tally(officialCardsInClosestRank.map(c => c.nestKind || ''));
+      recommendedValues.nestKind = objectKeys(nestTally)[0] || null;
+
+      recommendedValues.power = officialCardsInClosestRank[0].power;
+      recommendedValues.foodCost = officialCardsInClosestRank[0].foodCost;
+    }
   }
 
   // Fan-made cards
   const fanmadeCards = await findFanmadeCards(latinName, speciesName);
+
+  // GloBI
+  const interactionsOfInterest = new Set([
+    'acquiresNutrientsFrom',
+    'coOccursWith',
+    'coRoostsWith',
+    'createsHabitatFor',
+    'dispersalVectorOf',
+    'eatenBy',
+    'eats',
+    'ecologicallyRelatedTo',
+    'hasParasite',
+    'killedBy',
+    'kills',
+    'pollinates',
+    'preyedUponBy',
+    'preysUpon',
+    'symbiontOf',
+    'visitsFlowersOf',
+  ]);
+  const globiData = await getInteractions(latinName);
+  const interaction = globiData.find(interaction =>
+    RE_SPECIES_NAME.test(interaction.target.name)
+    && interactionsOfInterest.has(interaction.interaction_type)
+  );
+  if (interaction) {
+    recommendedValues.flavor ||= [
+      'The',
+      recommendedValues.nameCommon || recommendedValues.nameLatin,
+      fromCamelCaseToTitleCase(interaction.interaction_type).toLocaleLowerCase(),
+      `${interaction.target.name}.`
+    ].join(' ');
+  }
 
   return {
     classification: [ ...Object.values(taxonomy).slice(0, -1), speciesName ],
