@@ -1,7 +1,6 @@
-import type { ComponentProps } from 'react';
-import type WingspanCard from '../WingspanCard';
+import type { WingspanCardProps } from '../WingspanCard';
 
-export const BLANK_CARD: ComponentProps<typeof WingspanCard> = {
+export const BLANK_CARD: WingspanCardProps = {
   eggCapacity: 0,
   flavor: '',
   foodCost: '[no-food]',
@@ -17,7 +16,7 @@ export const BLANK_CARD: ComponentProps<typeof WingspanCard> = {
   wingspan: 0,
 };
 
-export const DEFAULT_CARDS: Array<ComponentProps<typeof WingspanCard>> = [
+export const DEFAULT_CARDS: Array<WingspanCardProps> = [
   // Baja California Hummingbird
   {
     eggCapacity: 2,
@@ -29,7 +28,7 @@ export const DEFAULT_CARDS: Array<ComponentProps<typeof WingspanCard>> = [
     nameCommon: 'Baja California Hummingbird',
     nameLatin: 'Basilinna xantusii',
     nestKind: 'bowl',
-    photo: { url: 'https://inaturalist-open-data.s3.amazonaws.com/photos/465744479/original.jpeg', removeBg: true, scale: 1.4, translateX: 19, translateY: 10, },
+    photo: { url: 'https://inaturalist-open-data.s3.amazonaws.com/photos/465744479/original.jpeg', removeBg: true, scale: 1.4, translateX: 19, translateY: 10, altText: "Baja California Hummingbird" },
     power: { kind: 'WHEN ACTIVATED', text: 'All players gain 1 [nectar] from the supply.' },
     victoryPoints: 6,
     wingspan: 11
@@ -45,7 +44,7 @@ export const DEFAULT_CARDS: Array<ComponentProps<typeof WingspanCard>> = [
     nameCommon: 'Black Kite',
     nameLatin: 'Milvus migrans',
     nestKind: 'platform',
-    photo: { url: 'https://inaturalist-open-data.s3.amazonaws.com/photos/252849067/original.jpeg', removeBg: true, scale: 0.95, translateX: 5, translateY: -15, },
+    photo: { url: 'https://inaturalist-open-data.s3.amazonaws.com/photos/252849067/original.jpeg', removeBg: true, scale: 0.95, translateX: 5, translateY: -15, altText: "Black Kite" },
     power: { kind: 'WHEN ACTIVATED', text: 'Tuck 1 face-up [card] from the tray with a wingspan <60cm under this bird.' },
     victoryPoints: 3,
     wingspan: 134,
@@ -62,11 +61,16 @@ export const DEFAULT_CARDS: Array<ComponentProps<typeof WingspanCard>> = [
     nameLatin: "Mareca strepera",
     nestKind: "ground",
     // photo: { url: 'https://inaturalist-open-data.s3.amazonaws.com/photos/13452704/original.jpg', removeBg: true, scale: 2.7, translateX: 9, translateY: 11 },
-    photo: { url: 'https://inaturalist-open-data.s3.amazonaws.com/photos/185113500/original.jpeg', removeBg: true, scale: 1.4, translateX: -9, translateY: 15, },
+    photo: { url: 'https://inaturalist-open-data.s3.amazonaws.com/photos/185113500/original.jpeg', removeBg: true, scale: 1.4, translateX: -9, translateY: 15, altText: 'Gadwall' },
     power: { kind: 'ONCE BETWEEN TURNS', text: 'When another player takes the "gain food" action, choose a [wild] they gained from the birdfeeder and cache 1 on this bird from the supply.' },
     victoryPoints: 5,
     wingspan: 90,
   },
+  // // Crested Tit
+  // {
+  //   nameLatin: 'Lophophanes cristatus',
+  // }
+  // // Corncrake
 ];
 
 
@@ -87,6 +91,7 @@ export const EXAMPLES = [
       scale: 0.9,
       translateX: 7,
       url: 'https://inaturalist-open-data.s3.amazonaws.com/photos/441914849/original.jpg',
+      altText: 'Mallard',
     },
     power: {
       kind: 'WHEN ACTIVATED',
@@ -112,6 +117,7 @@ export const EXAMPLES = [
       translateX: 9,
       translateY: 3,
       url: 'https://inaturalist-open-data.s3.amazonaws.com/photos/76223579/original.jpg',
+      altText: 'Canada Goose',
     },
     power: {
       kind: 'WHEN ACTIVATED',
@@ -137,6 +143,7 @@ export const EXAMPLES = [
       translateX: 10,
       translateY: -5,
       url: 'https://inaturalist-open-data.s3.amazonaws.com/photos/343655188/original.jpeg',
+      altText: 'Common Buzzard',
     },
     power: {
       kind: 'WHEN PLAYED',
@@ -145,4 +152,4 @@ export const EXAMPLES = [
     victoryPoints: 4,
     wingspan: 123,
   },
-] satisfies ComponentProps<typeof WingspanCard>[];
+] satisfies WingspanCardProps[];

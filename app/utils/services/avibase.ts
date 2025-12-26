@@ -92,7 +92,7 @@ const parseAvibaseData = (data: ReturnType<typeof groupAvibaseData>): Record<str
                 case 'grams':
                   break;
                 default:
-                  console.error(`Unknown unit: ${unit} for ${key}`);
+                  console.error(`Unknown unit (${kind}): ${unit} for ${key}`);
               }
 
               return value * (Number(val.samplesize) || 1);

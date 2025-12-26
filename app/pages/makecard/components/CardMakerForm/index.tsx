@@ -1,18 +1,19 @@
 import { styled } from '@linaria/react';
 import Input from '~/components/forms/Input';
 import WingspanCard from '../WingspanCard';
-import { memo, useId, useMemo, useState } from 'react';
+import { memo, useCallback, useMemo, useState, type ComponentProps } from 'react';
 import Button from '~/components/forms/Button';
 import { css } from '@linaria/core';
 import useCardMakerForm from './useCardMakerForm';
 import type { FanmadeBirdRow, OfficialBirdRow } from '~/data/official-birds';
-import type getWikiData from '~/utils/http/getWikiData';
+import type getWikiData from '~/utils/services/wikidata';
 import FormGridLayout from '~/components/forms/FormGridLayout';
 import Select from '~/components/forms/Select';
 import DownloadButton from '../DownloadButton';
 import SwitchDock from '~/components/forms/SwitchDock';
 import { POWER_COLOR_LOOKUP } from '../WingspanCard/Power';
 import ResearchHelpSection from './ResearchHelpSection';
+import PhotoSelector from './PhotoSelector';
 
 const buttonStyles = css`
   align-self: flex-end;
@@ -73,7 +74,13 @@ const NEST_OPTIONS = [
 
 const POWER_KIND_OPTIONS = Object.keys(POWER_COLOR_LOOKUP).map(kind => ({ value: kind, label: kind }));
 
-const CardMakerForm = () => {
+type Props = {
+  id: string
+  onSave: (newVals: ComponentProps<typeof WingspanCard>) => void;
+  savedValues: ComponentProps<typeof WingspanCard>;
+};
+
+const CardMakerForm = ({ id, onSave, savedValues }: Props) => {
   const [classification, setClassification] = useState<string[]>([]);
   const [officialCards, setOfficialCards] = useState<Record<string, OfficialBirdRow[]>>();
   const [fanmadeCards, setFanmadeCards] = useState<FanmadeBirdRow[]>();
@@ -83,13 +90,17 @@ const CardMakerForm = () => {
     formRef,
     formValues,
     handleChange,
-    handleValidateLatinName
+    handleValidateLatinName,
+    recommendedValues,
   } = useCardMakerForm({
+    savedValues,
     setClassification,
     setOfficialCards,
     setFanmadeCards,
     setWikiData,
   });
+
+  const handleSave = useCallback(() => onSave(formValues), [formValues, onSave]);
 
   const habitatOptions = useMemo(() => HABITAT_OPTIONS.map(opt => ({
     ...opt,
@@ -98,16 +109,14 @@ const CardMakerForm = () => {
 
   const isValid = classification.length > 1;
 
-  const id = useId();
-
   return (
     <Container>
       <Preview>
         <WingspanCard id={id} {...formValues} />
-        <DownloadButton elementId={id} fileName={formValues.nameCommon} />
-        <Button>Save to Gallery</Button>
+        <DownloadButton elementId={id} fileName={formValues.nameCommon || id} />
+        <Button onClick={handleSave}>Save to Gallery</Button>
       </Preview>
-      <FormWrapper onChange={handleChange} action={console.log} ref={formRef}>
+      <FormWrapper autoComplete='off' onChange={handleChange} action={console.log} ref={formRef}>
         <Input
           defaultValue={formValues.nameLatin}
           kind="text"
@@ -132,7 +141,8 @@ const CardMakerForm = () => {
                 label="Common Name"
                 name="nameCommon"
                 type="text"
-                value={formValues.nameCommon}
+                key={'nameCommon' + recommendedValues.nameCommon}
+                defaultValue={formValues.nameCommon}
               />
               <SwitchDock label="Habitat" options={habitatOptions} gridSpan={6} />
               <Input
@@ -141,28 +151,33 @@ const CardMakerForm = () => {
                 label="Food Cost"
                 name="foodCost"
                 type="text"
-                value={formValues.foodCost}
+                key={'foodCost' + recommendedValues.foodCost}
+                defaultValue={formValues.foodCost}
               />
               <Input
+                defaultValue={formValues.victoryPoints}
                 gridSpan={4}
+                key={'victoryPoints' + recommendedValues.victoryPoints}
                 kind="number"
                 label="Victory Points"
                 max="9"
                 min="0"
                 name="victoryPoints"
                 type="number"
-                value={formValues.victoryPoints}
               />
               <Select
+                defaultValue={`${formValues.nestKind}`}
                 gridSpan={4}
+                key={'nestKind' + recommendedValues.nestKind}
                 label="Nest Kind"
                 name="nestKind"
                 options={NEST_OPTIONS}
-                value={`${formValues.nestKind}`}
               />
               <Input
+                defaultValue={formValues.eggCapacity}
                 disabled={formValues.nestKind === null}
                 gridSpan={4}
+                key={'eggCapacity' + recommendedValues.eggCapacity}
                 kind="number"
                 label="Egg Capacity"
                 max="6"
@@ -170,34 +185,44 @@ const CardMakerForm = () => {
                 name="eggCapacity"
                 status={formValues.nestKind === null ? 'disabled' : undefined}
                 type="number"
-                value={formValues.eggCapacity}
               />
+              {formValues.photo && (
+                <PhotoSelector
+                  {...formValues.photo}
+                  handleChange={handleChange}
+                  inaturalistId={wikiData?.identifiers.find(id => id.propertyId === 'P3151')?.id || ''}
+                />
+              )}
               <Input
                 kind="number"
                 label="Wingspan"
                 name="wingspan"
                 type="number"
-                value={formValues.wingspan}
+                key={'wingspan' + recommendedValues.wingspan}
+                defaultValue={formValues.wingspan}
               />
               <Select
+                defaultValue={`${formValues.power?.kind}`}
                 gridSpan={4}
+                key={'power.kind' + recommendedValues.power?.kind}
                 label="Power Kind"
                 name="power.kind"
                 options={POWER_KIND_OPTIONS}
-                value={`${formValues.power?.kind}`}
               />
               <Input
                 gridSpan={8}
                 kind="textarea"
                 label="Power Text"
                 name="power.text"
-                value={formValues.power?.text}
+                key={'power.text' + recommendedValues.power?.text}
+                defaultValue={formValues.power?.text}
               />
               <Input
                 kind="textarea"
                 label="Flavor Text"
                 name="flavor"
-                value={formValues.flavor}
+                key={'flavor' + recommendedValues.flavor}
+                defaultValue={formValues.flavor}
               />
             </FormGridLayout>
           </>

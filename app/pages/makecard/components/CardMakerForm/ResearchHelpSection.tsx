@@ -4,7 +4,7 @@ import InfoSection from './InfoSection';
 import Taxonomy from './Taxonomy';
 import StyledExternalLink from '~/components/ExternalLink';
 import { Fragment } from 'react';
-import type getWikiData from '~/utils/http/getWikiData';
+import type getWikiData from '~/utils/services/wikidata';
 import type { FanmadeBirdRow, OfficialBirdRow } from '~/data/official-birds';
 
 const ExternalLinksList = styled.ul`
@@ -33,6 +33,10 @@ interface Props {
   wikidataIdentifiers: Awaited<ReturnType<typeof getWikiData>>['identifiers'];
 };
 
+/**
+ * This contains all the informational sections of the card maker. It doesn't include any of the
+ * actual form inputs.
+ */
 const ResearchHelpSection = (
   {
     classification,

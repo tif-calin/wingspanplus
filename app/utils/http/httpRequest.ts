@@ -34,23 +34,16 @@ type OptsHttpRequest = {
   withProxy?: boolean;
 };
 
-/**
- * Caches all HTTP requests
- *  - url
- *  - method
- *  - date
- *  - status code
- *  - response size
- *  - response body
- */
-const httpRequest = async (
+// TODO: fix any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const httpRequest = async <T = any>(
   url: string,
   method: Method = 'GET',
   opts: Partial<OptsHttpRequest> = {}
-) => {
+): Promise<T> => {
   const {
     crawlDelay = 69,
-    isLoud = !!import.meta.env.DEV,
+    isLoud = !!import.meta.env.DEV && false,
     readAs = 'text',
     shouldUseCache = true,
     withProxy = false,

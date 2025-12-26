@@ -27,6 +27,7 @@ const PAGES = [
   { propertyId: null, url: 'https://www.wikidata.org/wiki/{{ID}}', title: 'Wikidata', desc: 'knowledge base' },
   // TODO: Biodiversity Heritage Library https://www.biodiversitylibrary.org/name/Cinnyris_osea
   // eBird, BirdLife, All About Birds
+  // TODO: GloBI
 ] as const;
 
 /**

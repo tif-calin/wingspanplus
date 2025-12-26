@@ -115,7 +115,7 @@ export const deepMerge = <
           acc[key] = deepMerge(val1 as { [key: string]: Json }, val2, recursion - 1);
       } else acc[key] = val2;
 
-      return acc;
+      return { ...acc };
     },
     {} as Json
   );

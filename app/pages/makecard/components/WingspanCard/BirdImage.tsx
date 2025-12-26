@@ -4,7 +4,7 @@ import removeBackgroundFromUrl from '../../utils/removeBackgroundFromUrl';
 
 type Props = {
   altText: string;
-  imageSrc: string;
+  url: string;
   removeBg?: boolean;
   scale?: number;
   translateX?: number;
@@ -22,16 +22,21 @@ const Wrapper = styled.picture<{
   ;
 `;
 
-const BirdImage = ( { altText, imageSrc, removeBg, scale, translateX, translateY }: Props) => {
-  const [src, setSrc] = useState(imageSrc);
+const getSrc = async (url: string, removeBg: boolean) => {
+  if (removeBg) return removeBackgroundFromUrl(url);
+  return Promise.resolve(url);
+};
+
+const BirdImage = ( { altText, url, removeBg, scale, translateX, translateY }: Props) => {
+  const [src, setSrc] = useState(url);
 
   useEffect(() => {
-    if (removeBg) removeBackgroundFromUrl(imageSrc).then(setSrc);
-  }, [imageSrc, removeBg]);
+    getSrc(url, !!removeBg).then(setSrc);
+  }, [url, removeBg]);
 
   return (
     <Wrapper style={{ transform: `scale(${scale || 1}) translate(${translateX || 0}%, ${translateY || 0}%)` }}>
-      {src && <img src={src} alt={altText} />}
+      {src && <img key={src} src={src} alt={altText} />}
     </Wrapper>
   );
 };
