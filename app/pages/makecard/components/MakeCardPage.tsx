@@ -2,7 +2,9 @@ import { styled } from '@linaria/react';
 import WingspanCard from './WingspanCard';
 import FONTS from '../utils/fonts';
 import FormCardCreator from './CardMakerForm';
-import { EXAMPLES } from './CardMakerForm/default-cards';
+import useCardGallery from '../hooks/useCardGallery';
+import GalleryItem, { AddNewCardItem } from './CardGallery/GalleryItem';
+import { useCallback, useState, type ComponentProps } from 'react';
 
 const Content = styled.div`
   ${FONTS}
@@ -43,19 +45,33 @@ const ContentTitle = styled.h2`
 `;
 
 const MakeCardPage = () => {
+  const { handleAdd, handleDelete, handleUpdate, cardGallery } = useCardGallery();
+  const [selectedId, setSelectedId] = useState(cardGallery[0]?.id);
+
+  const handleSaveSelectedCard = useCallback(
+    (newVals: ComponentProps<typeof WingspanCard>) => handleUpdate(selectedId, newVals),
+    [handleUpdate, selectedId]
+  );
+
   return (
     <>
       <Content className='island'>
-        <ContentTitle>
-          Maker
-        </ContentTitle>
-        <FormCardCreator />
+        <ContentTitle>Maker</ContentTitle>
+        <FormCardCreator
+          key={selectedId}
+          id={selectedId}
+          onSave={handleSaveSelectedCard}
+          savedValues={cardGallery.find(card => card.id === selectedId)!}
+        />
       </Content>
       <Content className='island'>
         <ContentTitle>Gallery</ContentTitle>
         <div className="gallery">
-          {EXAMPLES.map(bird => (
-            <WingspanCard key={bird.nameCommon} {...bird} />
+          <AddNewCardItem onClick={handleAdd} />
+          {cardGallery.map(bird => (
+            <GalleryItem key={bird.id} cardId={bird.id} handleDelete={handleDelete} handleSelect={setSelectedId}>
+              <WingspanCard key={bird.id} {...bird} />
+            </GalleryItem>
           ))}
         </div>
       </Content>

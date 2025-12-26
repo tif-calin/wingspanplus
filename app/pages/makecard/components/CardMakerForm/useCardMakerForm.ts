@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useRef, useState, type ComponentProps, type Dispatch, type DOMAttributes, type FormEventHandler, type SetStateAction } from 'react';
+import { useCallback, useMemo, useRef, useState, type ComponentProps, type Dispatch, type DOMAttributes, type FormEvent, type SetStateAction } from 'react';
 import { deepMerge } from '~/utils/objects';
 import type { FanmadeBirdRow, OfficialBirdRow } from '~/data/official-birds';
 import getWikiData from '~/utils/services/wikidata';
@@ -8,23 +8,27 @@ import { BLANK_CARD } from './default-cards';
 import { constructRecommendedValues } from '../../utils/constructRecommendedValues';
 
 type UseCardMakerFormParams = {
+  savedValues: ComponentProps<typeof WingspanCard>;
   setClassification: Dispatch<SetStateAction<string[]>>;
   setFanmadeCards: Dispatch<SetStateAction<FanmadeBirdRow[] | undefined>>;
   setOfficialCards: Dispatch<SetStateAction<Record<string, OfficialBirdRow[]> | undefined>>;
   setWikiData: Dispatch<SetStateAction<Awaited<ReturnType<typeof getWikiData>> | undefined>>;
 };
 
+type Card = ComponentProps<typeof WingspanCard>;
+
 const useCardMakerForm = ({
+  savedValues,
   setClassification,
   setFanmadeCards,
   setOfficialCards,
   setWikiData,
 }: UseCardMakerFormParams) => {
   const formRef = useRef<HTMLFormElement>(null);
-  const [editedValues, setEditedValues] = useState<Partial<ComponentProps<typeof WingspanCard>>>({});
-  const [recommendedValues, setRecommendedValues] = useState<Partial<ComponentProps<typeof WingspanCard>>>({});
+  const [editedValues, setEditedValues] = useState<Card>({});
+  const [recommendedValues, setRecommendedValues] = useState<Card>({});
 
-  const handleChange = useCallback<FormEventHandler<HTMLFormElement>>(event => {
+  const handleChange = useCallback((event: Pick<FormEvent<HTMLFormElement>, 'currentTarget' | 'target'>) => {
     const formElement = event.currentTarget;
     const inputElement = event.target as HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement | null;
     if (!formElement || !inputElement) return;
@@ -36,16 +40,16 @@ const useCardMakerForm = ({
     if (editedVal === 'null') editedVal = null;
 
     const newFormValues = editedKey.split('.').reverse().reduce((acc, currKey) => ({ [currKey]: acc }), editedVal as DeepPartial<typeof formValues>);
-
-    setEditedValues(oldVals => deepMerge(oldVals, newFormValues));
-  }, []);
+    setEditedValues(deepMerge(editedValues, newFormValues));
+  }, [editedValues]);
 
   // eslint-disable-next-line react-hooks/preserve-manual-memoization
-  const formValues = useMemo(
-    () => {
-      return deepMerge(BLANK_CARD, deepMerge(recommendedValues, editedValues));
-    },
-    [editedValues, recommendedValues]
+  const formValues = useMemo<Card>(
+    () => deepMerge(
+      deepMerge(BLANK_CARD, recommendedValues),
+      deepMerge(savedValues, editedValues)
+    ),
+    [editedValues, recommendedValues, savedValues]
   );
 
   const handleValidateLatinName = useCallback<NonNullable<DOMAttributes<HTMLButtonElement>['onClick']>>(
@@ -82,7 +86,7 @@ const useCardMakerForm = ({
     [setClassification, setFanmadeCards, setOfficialCards, setWikiData]
   );
 
-  return { formRef, formValues, handleChange, handleValidateLatinName, };
+  return { formRef, formValues, handleChange, handleValidateLatinName, recommendedValues };
 };
 
 export default useCardMakerForm;

@@ -1,6 +1,5 @@
 import Papa from 'papaparse';
-import type { ComponentProps } from 'react';
-import WingspanCard from '~/pages/makecard/components/WingspanCard';
+import { type WingspanCardProps } from '~/pages/makecard/components/WingspanCard';
 import type { FoodString } from '~/pages/makecard/components/WingspanCard/HabitatInfo';
 import type { FoodEnum } from '~/pages/makecard/types';
 
@@ -71,9 +70,8 @@ const makeFoodCost = (
   return foodCost as FoodString;
 };
 
-type Card = ComponentProps<typeof WingspanCard>;
-export const officialRowToCard = (row: OfficialBirdRow): Card => {
-  let nestKind: Card['nestKind'] = row['Nest type'] === 'wild' ? 'star' : row['Nest type'];
+export const officialRowToCard = (row: OfficialBirdRow): WingspanCardProps => {
+  let nestKind: WingspanCardProps['nestKind'] = row['Nest type'] === 'wild' ? 'star' : row['Nest type'];
   nestKind ||= null;
 
   const powerKind = ({
@@ -83,7 +81,7 @@ export const officialRowToCard = (row: OfficialBirdRow): Card => {
     yellow: 'GAME END',
     white: 'WHEN PLAYED',
   } as const)[row['Color']];
-  const power: Card['power'] = row['Power text'] ? { kind: powerKind, text: row['Power text'] } : undefined;
+  const power: WingspanCardProps['power'] = row['Power text'] ? { kind: powerKind, text: row['Power text'] } : undefined;
   if (power && row['Predator'] === 'X') power.tag = 'predator';
   if (power && row['Flocking'] === 'X') power.tag = 'flocking';
   if (power && row['Bonus card'] === 'X') power.tag = 'bonus';

@@ -1,10 +1,13 @@
 import { styled } from '@linaria/react';
-import React, { type ComponentProps } from 'react';
+import React, { memo, type ComponentProps } from 'react';
 import HabitatInfo from './HabitatInfo';
 import LeftSideBarInfo from './LeftSideBarInfo';
 import BirdImage from './BirdImage';
 import Icon from '../Icon';
 import Power from './Power';
+import type { DeepPartial } from '~/utils/utilityTypes';
+import { deepMerge } from '~/utils/objects';
+import { BLANK_CARD } from '../CardMakerForm/default-cards';
 
 const Wrapper = styled.div`
   /* https://onlinejpgtools.com/find-dominant-jpg-colors */
@@ -127,33 +130,35 @@ const BottomRow = styled.div`
   }
 `;
 
-type Props = {
+export type WingspanCardProps = {
   id?: string;
   flavor?: string;
   nameCommon: string;
   nameLatin: string;
-  // TODO: move logic to BirdImage component and make this photo?: ComponentProps<typeof BirdImage>
-  photo?: { url: string; removeBg?: boolean; scale?: number; translateX?: number; translateY?: number };
+  photo?: ComponentProps<typeof BirdImage>;
   power?: ComponentProps<typeof Power>;
   wingspan: number | '*';
 } & ComponentProps<typeof LeftSideBarInfo> & ComponentProps<typeof HabitatInfo>;
 
 const WingspanCard = React.memo(({
   id,
-  eggCapacity,
-  flavor,
-  foodCost,
-  forest,
-  grassland,
-  wetland,
-  nameCommon,
-  nameLatin,
-  nestKind,
-  photo,
-  power,
-  victoryPoints,
-  wingspan,
-}: Props) => {
+  ...props
+}: DeepPartial<WingspanCardProps>) => {
+  const {
+    eggCapacity,
+    flavor,
+    foodCost,
+    forest,
+    grassland,
+    wetland,
+    nameCommon,
+    nameLatin,
+    nestKind,
+    photo,
+    power,
+    victoryPoints,
+    wingspan,
+  } = deepMerge(BLANK_CARD, props) as WingspanCardProps;
 
   return (
     <Wrapper id={id}>
@@ -167,7 +172,7 @@ const WingspanCard = React.memo(({
       <MiddleRow>
         <LeftSideBarInfo eggCapacity={eggCapacity} nestKind={nestKind} victoryPoints={victoryPoints} />
         <BirdImage
-          imageSrc={photo?.url || ''}
+          url={photo?.url || ''}
           altText={`bird photo of ${nameCommon}`}
           removeBg={photo?.removeBg}
           scale={photo?.scale}
@@ -183,7 +188,7 @@ const WingspanCard = React.memo(({
         {power?.kind && <Power {...power} />}
         {flavor && (
           <div className="flavor">
-            <Icon className="map" icon={`range-maps/${nameLatin}`} altText="range map" fallback={null} />
+            <Icon key={nameLatin} className="map" icon={`range-maps/${nameLatin}`} altText="range map" fallback={null} />
             <p>{flavor}</p>
           </div>)
         }
@@ -192,4 +197,6 @@ const WingspanCard = React.memo(({
   )
 });
 
-export default WingspanCard;
+export default memo(WingspanCard);
+
+export const EmptyCard = () => <Wrapper id="empty-card"></Wrapper>;
