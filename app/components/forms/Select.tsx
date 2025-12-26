@@ -13,6 +13,15 @@ const SelectWrapper = styled.div<{ gridSpan: number }>`
   padding: 0;
   position: relative;
 
+  &:focus-within {
+    border-color: #0000;
+    outline: 2px dashed var(--clr-focus);
+
+    & > .label {
+      outline: 1px solid var(--clr-focus);
+    }
+  }
+
   & > select {
     background: none;
     border: none;
@@ -27,12 +36,14 @@ const SelectWrapper = styled.div<{ gridSpan: number }>`
     background: #fff;
     color: #99a;
     font-size: 0.8em;
+    line-height: 1;
     padding: 0 0.25rem;
     pointer-events: none;
     position: absolute;
      top: -0.75rem;
      left: 0.25rem;
-    transition: all 0.15s ease-in-out;
+    transition: color 0.15s ease-in-out;
+     transition-property: color, top;
     z-index: 0;
   }
 `;

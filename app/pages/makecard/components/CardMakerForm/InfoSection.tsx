@@ -12,6 +12,11 @@ const StyledInfoSection = styled.span`
 
     &::after { content: ':'; }
   }
+
+  & .content {
+    max-height: calc(100px + 5vh);
+    overflow: auto;
+  }
 `;
 
 type Props = {
@@ -22,7 +27,9 @@ type Props = {
 const InfoSection = ({ title, children }: Props) => (
   <StyledInfoSection>
     <span>{title}</span>
-    {children}
+    <div className="content">
+      {children}
+    </div>
   </StyledInfoSection>
 );
 

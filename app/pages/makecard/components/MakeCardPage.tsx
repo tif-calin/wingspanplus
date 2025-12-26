@@ -8,7 +8,10 @@ const Content = styled.div`
   ${FONTS}
 
   --clr-border: #455;
+  --clr-focus: #fed23c;
+  --clr-primary: #6bc4c1;
 
+  accent-color: var(--clr-focus);
   display: flex;
    align-items: center;
    justify-content: center;

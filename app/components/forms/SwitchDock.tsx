@@ -46,7 +46,12 @@ const SwitchDock = (props: Props) => {
 
       {props.options.map(opt => (
         <label key={opt.value}>
-          <input type="checkbox" name={opt.value} defaultChecked={opt.defaultChecked} />
+          <input
+            defaultChecked={opt.defaultChecked}
+            key={opt.value + opt.defaultChecked}
+            name={opt.value}
+            type="checkbox"
+          />
           {opt.label}
         </label>
       ))}

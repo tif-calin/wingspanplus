@@ -8,6 +8,7 @@ const InputStyled = styled.div<{ gridSpan: number }>`
   --clr-label: #99a;
   --clr-success: #3a5;
   --clr-error: #c44;
+  --clr-focus: var(var(--clr-focus), --oc-orange-4);
 
   background-color: var(--clr-bg);
   border: 2px solid var(--clr-border);
@@ -24,9 +25,19 @@ const InputStyled = styled.div<{ gridSpan: number }>`
     position: absolute;
      top: 0.125rem;
      left: 0.5rem;
-    transition: all 0.15s ease-in-out;
+    transition: top 0.15s ease-in-out;
+     transition-property: color, top;
     white-space: nowrap;
     z-index: 1;
+  }
+
+  &:focus-within {
+    border-color: #0000;
+    outline: 2px dashed var(--clr-focus);
+
+    & > .label {
+      outline: 1px solid var(--clr-focus);
+    }
   }
 
   &.success > :where(input, textarea):valid:not(:placeholder-shown) + .label { color: var(--clr-success); }
@@ -35,6 +46,7 @@ const InputStyled = styled.div<{ gridSpan: number }>`
     border: none;
     flex-grow: 1;
     line-height: 1.25;
+    max-width: 100%;
     outline: none;
     padding: 0.25rem 0.5rem;
     z-index: 1;
@@ -43,6 +55,7 @@ const InputStyled = styled.div<{ gridSpan: number }>`
     &:not(:placeholder-shown) + .label {
       background: var(--clr-bg);
       font-size: 0.8em;
+      line-height: 1;
       left: 0.25rem;
       padding: 0 0.25rem;
       top: -0.75rem;
@@ -63,6 +76,8 @@ type Props = {
   gridSpan?: number;
   /** Success state turns label text green. */
   status?: 'disabled' | 'error' | 'success';
+  /** By default 'className' is passed to the underlying input element. */
+  wrapperClassName?: string;
 } & (
   | ({ kind: 'number' | 'text'; } & HtmlInputAttributes<HTMLInputElement, 'name' | 'type'>)
   | ({ kind: 'select'; options: Array<{ value: string; label: string }>; } & HtmlInputAttributes<HTMLSelectElement, 'name'>)
@@ -74,13 +89,14 @@ const Input = (props: Props) => {
     label,
     gridSpan = 12,
     status,
+    wrapperClassName,
     ...inputProps
   } = props;
 
   const id = useId();
 
   return (
-    <InputStyled gridSpan={gridSpan} className={status}>
+    <InputStyled gridSpan={gridSpan} className={`${status} ${wrapperClassName}`}>
       {inputProps.kind === 'number' && (
         <input id={id} placeholder="&nbsp;" {...inputProps} />
       )}

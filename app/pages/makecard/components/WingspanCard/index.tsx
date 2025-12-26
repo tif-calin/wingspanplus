@@ -25,6 +25,7 @@ const Wrapper = styled.div`
   height: var(--height);
    width: var(--width);
   overflow: hidden;
+  text-align: unset;
 
   & > * { position: relative; }
 `;
