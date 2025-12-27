@@ -74,7 +74,6 @@ const PhotoSelector = ({ handleChange, inaturalistId, ...photo }: Props) => {
 
     const photoId = Number(ev.currentTarget.value);
     const photoUrl = photoOptions.find(photo => photo.id === photoId)?.url?.replace('square', 'original');
-    console.log('photoId', photoUrl);
 
     const urlInput = document.getElementById(urlInputId) as HTMLInputElement | null;
     if (urlInput && urlInput.form) {

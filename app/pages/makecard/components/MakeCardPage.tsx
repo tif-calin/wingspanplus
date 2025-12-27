@@ -12,6 +12,7 @@ const Content = styled.div`
   --clr-border: #455;
   --clr-focus: #fed23c;
   --clr-primary: #6bc4c1;
+  --clr-card-bg: #f6f6f2;
 
   accent-color: var(--clr-focus);
   display: flex;

@@ -17,7 +17,6 @@ const Wrapper = styled.div`
 
   & picture {
     width: 5.25mm;
-    filter: drop-shadow(0 0 0.2mm #f6f6f2);
   }
 
   & .victory-points {
@@ -66,7 +65,7 @@ type Props = {
 const LeftSideBarInfo = ({ eggCapacity, nestKind, victoryPoints }: Props) => {
 
   return (
-    <Wrapper>
+    <Wrapper className='floating-element'>
       <div className="victory-points">
         {victoryPoints}
         <Icon icon="point" altText="feather for victory points" />

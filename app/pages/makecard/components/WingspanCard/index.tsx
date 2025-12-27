@@ -19,7 +19,7 @@ const Wrapper = styled.div`
   --height: 86.8mm;
   --width: 56.8mm;
 
-  background-color: #f6f6f2;
+  background-color: var(--clr-card-bg, #f6f6f2);
   border-radius: 3.5mm;
   box-shadow: var(--shadow-elevation-medium), 0 0 2px hsl(var(--shadow-color));
   display: flex;
@@ -31,6 +31,16 @@ const Wrapper = styled.div`
   text-align: unset;
 
   & > * { position: relative; }
+
+  & .floating-element {
+    filter:
+      drop-shadow(0.1mm 0.1mm #f6f6f2)
+      drop-shadow(0.1mm -0.1mm #f6f6f2)
+      drop-shadow(-0.1mm 0.1mm #f6f6f2)
+      drop-shadow(-0.1mm -0.1mm #f6f6f2)
+      drop-shadow(0 0 0.5mm #f6f6f2)
+    ;
+  }
 `;
 
 const UpperRow = styled.div`
@@ -77,7 +87,6 @@ const MiddleRow = styled.div`
 
   & .wingspan {
     margin-right: 3.75mm;
-    filter: drop-shadow(0 0 0.1mm #f6f6f2);
     position: absolute;
      bottom: 0;
      right: 0;
@@ -91,10 +100,6 @@ const MiddleRow = styled.div`
     position: absolute;
     right: 0;
     z-index: 1;
-  }
-
-  & .wingspan, .eggs, .nest, .victory-points {
-    filter: drop-shadow(0 0 1mm #f6f6f2);
   }
 
   & .nest picture {
@@ -179,7 +184,7 @@ const WingspanCard = React.memo(({
           translateX={photo?.translateX}
           translateY={photo?.translateY}
         />
-        <div className="wingspan">
+        <div className="wingspan floating-element">
           {Number.isFinite(Number(wingspan)) ? wingspan : '*'}cm
           <Icon icon="wingspan" altText="wingspan icon" />
         </div>
@@ -189,7 +194,7 @@ const WingspanCard = React.memo(({
         {flavor && (
           <div className="flavor">
             <Icon key={nameLatin} className="map" icon={`range-maps/${nameLatin}`} altText="range map" fallback={null} />
-            <p>{flavor}</p>
+            <p className='floating-element'>{flavor}</p>
           </div>)
         }
       </BottomRow>

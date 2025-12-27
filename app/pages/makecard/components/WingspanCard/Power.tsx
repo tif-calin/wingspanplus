@@ -25,7 +25,7 @@ const PowerWrapper = styled.div`
 
 const PowerText = styled.span`
   & img {
-    filter: drop-shadow(0 0 0.3mm #fff) brightness(0.95);
+    filter: drop-shadow(0 0 0.3mm var(--clr-card-bg)) brightness(0.95);
   }
 `;
 
