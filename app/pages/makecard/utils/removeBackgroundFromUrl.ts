@@ -1,15 +1,11 @@
-import { preload, removeBackground, type Config } from '@imgly/background-removal';
+import { preload, removeBackground } from '@imgly/background-removal';
 import { getCardMakerDb } from '~/utils/indexedDB';
+import { applyAutoCurves, applyAutoLevels } from './imageProcessing';
 
-const config: Config = {
-  progress: (key, curr, total) => {
-    console.log(`Preloading ${key}: ${curr} of ${total}`);
-  }
-};
-
-preload(config).then(() => {
-  console.log("Asset preloading succeeded");
-});
+// Preload imgly model
+preload({
+  progress: (key, curr, total) => console.log(`Preloading ${key}: ${curr} of ${total}`)
+}).then(() => console.log("Asset preloading succeeded"));
 
 function blobToBase64(blob: Blob) {
   return new Promise<string>((resolve, _) => {
@@ -19,43 +15,32 @@ function blobToBase64(blob: Blob) {
   });
 };
 
-const inMemoryCache: Record<string, string> = {};
+// const inMemoryCache: Record<string, string> = {};
 const removeBackgroundFromUrl = async (
   url: string | Blob,
-  cacheStrategy: 'memory' | 'localStorage' | 'indexedDB' = 'indexedDB'
+  // cacheStrategy: 'memory' | 'localStorage' | 'indexedDB' = 'indexedDB'
 ) => {
   const cacheKey = typeof url === 'string' ? url : URL.createObjectURL(url);
 
-  switch (cacheStrategy) {
-    case 'memory':
-      if (!inMemoryCache[cacheKey]) {
-        inMemoryCache[cacheKey] = 'loading';
-        const src = await removeBackground(url).then(blobToBase64);
-        inMemoryCache[cacheKey] = src;
-      }
-
-      return inMemoryCache[cacheKey];
-    case 'localStorage':
-      throw new Error('Not implemented');
-    case 'indexedDB': {
-      const db = await getCardMakerDb();
-      const value = await db.get('processed-photos', cacheKey);
-      let processedUrl = value?.processedUrl || null;
-      if (processedUrl === null) {
-        console.log(`Processing ${cacheKey}`);
-        processedUrl = await removeBackground(url).then(blobToBase64) || '';
-        await db.add('processed-photos', {
-          originalUrl: cacheKey,
-          processedUrl,
-          whenAccessed: Date.now(),
-          whenCreated: Date.now(),
-        });
-      }
-      // TODO: update whenAccessed otherwise
-
-      return processedUrl;
-    }
+  const db = await getCardMakerDb();
+  const value = await db.get('processed-photos', cacheKey);
+  let processedUrl = value?.processedUrl || null;
+  if (processedUrl === null) {
+    console.log(`Processing ${cacheKey}`);
+    processedUrl = await removeBackground(url)
+      .then(applyAutoCurves)
+      .then(applyAutoLevels)
+      .then(blobToBase64) || '';
+    await db.add('processed-photos', {
+      originalUrl: cacheKey,
+      processedUrl,
+      whenAccessed: Date.now(),
+      whenCreated: Date.now(),
+    });
   }
+  // TODO: update whenAccessed otherwise
+
+  return processedUrl;
 };
 
 export default removeBackgroundFromUrl;
